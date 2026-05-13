@@ -1,0 +1,21 @@
+# Build / Nuxt
+.nuxt
+.output
+dist
+.vercel
+.netlify
+
+# Deps
+node_modules
+
+# Lockfiles (opcional: remova se quiser formatar)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs / cache
+*.log
+.cache
+
+# Público grande / gerado
+coverage

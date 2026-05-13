@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-copy-base antialiased;
+    background-image: theme('backgroundImage.mesh');
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-brand-cyan/35 text-copy-strong;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-8xl px-4 sm:px-6 lg:px-10;
+  }
+
+  .surface {
+    @apply rounded-box border border-stroke bg-panel/90;
+  }
+
+  .section-banner {
+    @apply surface bg-ribbon bg-cover bg-center p-8 text-center sm:p-10;
+  }
+
+  .section-title {
+    @apply font-display text-3xl font-semibold tracking-tight text-copy-strong sm:text-4xl;
+  }
+
+  .section-copy {
+    @apply mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-copy-muted sm:text-base;
+  }
+
+  .brand-button {
+    @apply inline-flex items-center justify-center rounded-control border border-brand-cyan/60 bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-neon;
+  }
+
+  .ghost-button {
+    @apply inline-flex items-center justify-center rounded-control border border-stroke bg-panel-soft/80 px-5 py-2.5 text-sm font-semibold text-copy-strong transition duration-200 hover:border-brand-cyan/40 hover:bg-panel;
+  }
+
+  .field-control {
+    @apply w-full rounded-control border border-stroke bg-panel-soft/70 px-4 py-3 text-sm text-copy-strong outline-none placeholder:text-copy-muted/65 focus:border-brand-cyan/70 focus:shadow-[0_0_0_3px_rgba(29,182,253,0.24)];
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 700ms ease-out both;
+  }
+
+  .grid-overlay {
+    background-image:
+      linear-gradient(rgba(156, 163, 175, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(156, 163, 175, 0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .soft-divider {
+    @apply border-t border-stroke/70;
+  }
+
+  .delay-120 {
+    animation-delay: 120ms;
+  }
+
+  .delay-240 {
+    animation-delay: 240ms;
+  }
+
+  .delay-360 {
+    animation-delay: 360ms;
+  }
+
+  .delay-480 {
+    animation-delay: 480ms;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
