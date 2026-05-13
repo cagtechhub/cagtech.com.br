@@ -20,7 +20,7 @@ const { testimonials } = storeToRefs(landing)
       <article
         v-for="(testimonial, index) in testimonials"
         :key="testimonial.name"
-        class="surface animate-fade-up flex flex-col gap-6 p-6"
+        class="surface landing-interactive-surface group animate-fade-up flex flex-col gap-6 p-6"
         :style="{ animationDelay: `${index * 90}ms` }"
       >
         <div>

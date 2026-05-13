@@ -12,7 +12,7 @@ const { brandName, differentiators } = storeToRefs(landing)
     <div class="section-banner animate-fade-up">
       <h2 class="section-title">Por que escolher a {{ brandName }}?</h2>
       <p class="section-copy">
-        Unimos visão de produto, profundidade técnica e parceria de longo prazo para entregar soluções que continuam eficazes conforme seu negócio evolui.
+        Unimos engenharia de software para web, SEO e gestão de projeto para sites e landings que evoluem com seu negócio — do pacote inicial ao produto personalizado.
       </p>
     </div>
 
@@ -20,11 +20,11 @@ const { brandName, differentiators } = storeToRefs(landing)
       <article
         v-for="(item, index) in differentiators"
         :key="item.title"
-        class="surface animate-fade-up p-6"
+        class="surface landing-interactive-surface group animate-fade-up p-6"
         :style="{ animationDelay: `${index * 100}ms` }"
       >
         <div class="flex items-start gap-3">
-          <span class="inline-flex h-11 w-11 items-center justify-center rounded-control border border-brand-violet/35 bg-brand-violet/12 text-brand-violet">
+          <span class="inline-flex h-11 w-11 items-center justify-center rounded-control border border-brand-violet/35 bg-brand-violet/12 text-brand-violet transition duration-300 group-hover:scale-105 group-hover:border-brand-violet/55 group-hover:shadow-[0_0_26px_-10px_rgba(196,100,255,0.4)]">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
               <path :d="item.icon" />
             </svg>

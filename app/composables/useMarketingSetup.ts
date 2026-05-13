@@ -1,11 +1,16 @@
 export const useMarketingSetup = () => {
   const config = useRuntimeConfig()
+  const consent = useConsentStore()
 
   const ga4MeasurementId = computed(() => String(config.public.ga4MeasurementId || '').trim())
   const metaPixelId = computed(() => String(config.public.metaPixelId || '').trim())
 
   useHead(() => {
     const scripts: Array<Record<string, unknown>> = []
+
+    if (!consent.allowsMarketing) {
+      return { script: scripts }
+    }
 
     if (ga4MeasurementId.value) {
       const id = ga4MeasurementId.value

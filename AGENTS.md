@@ -17,13 +17,18 @@ Guia operacional para agentes (Cursor e similares) no projeto `cagtech.com.br`.
 
 Diretorios e arquivos relevantes:
 - `app/pages/index.vue`: composicao da landing por componentes.
-- `app/components/landing/`: secoes da home (IDs de ancora via `app/constants/landingScreen.ts`).
-- `app/constants/landingScreen.ts`: IDs de secao e itens do menu (fonte unica para ancoras).
-- `app/plugins/01.site-init.ts`: SEO global + scripts de marketing (equivalente ao antigo bootstrap em `app.vue`).
+- `app/components/landing/`: secoes da home (IDs de ancora via `app/constants/landingScreen.ts`), incluindo `LandingPackagesSection.vue` (pacotes comerciais).
+- `app/constants/landingScreen.ts`: IDs de secao (`home`, `services`, `packages`, `work`, etc.) e itens do menu (fonte unica para ancoras).
+- `app/plugins/00.consent-hydrate.client.ts`: hidrata `useConsentStore` a partir do `localStorage` antes dos scripts de marketing.
+- `app/plugins/01.site-init.ts`: SEO global (`useSiteSeoHead`) e marketing (`useMarketingSetup`), respeitando consentimento.
 - `app/error.vue`: pagina de erro alinhada ao layout.
 - `app/types/landing.ts`: tipos do conteudo da landing (servicos, FAQ, depoimentos, etc.).
 - `app/stores/useLandingStore.ts`: conteudo/dados da landing (navegacao, cards, faq, footer); exporta `faqItems` para SEO.
-- `app/stores/useSiteStore.ts`: integracoes utilitarias (ex.: WhatsApp tracking).
+- `app/stores/useConsentStore.ts`: escolha de cookies (`essential` | `all`); GA4/Meta só com `all`.
+- `app/components/consent/ConsentBanner.vue`: popup LGPD; layout inclui `<ConsentBanner />`.
+- `app/types/consent.ts`: chave de storage e tipo `ConsentChoice`.
+- `app/stores/useNotifyStore.ts`: fila de toasts (sucesso, erro, alerta, info); usar com `useNotify()` e `<NotifyStack />` no layout.
+- `app/components/notify/`: `NotifyPopup.vue` (card), `NotifyStack.vue` (Teleport + fila); tipos em `app/types/notify.ts`.
 - `app/composables/useSiteSeoHead.ts`: metadados SEO/OG/Twitter/Schema (titulo dinamico, FAQPage na `/`, Organization com logo e sameAs).
 - `app/composables/useSiteSeoUrls.ts`: origem publica e URL canonica.
 - `server/utils/no-index.ts`: leitura compartilhada de `noIndex` (robots e sitemap).
@@ -36,6 +41,7 @@ Diretorios e arquivos relevantes:
 ## 3) Comandos uteis
 - Instalar deps: `yarn install`
 - Desenvolvimento: `yarn dev`
+- **Docker (produção):** `docker compose up --build -d` (porta `WEB_PORT`, variáveis via `.env` na raiz). Imagem multi-stage: `Dockerfile` + `docker-compose.yml`.
 - Build: `yarn build`
 - Preview: `yarn preview`
 - Lint: `yarn lint`

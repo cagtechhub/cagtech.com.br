@@ -54,10 +54,20 @@ const config: Partial<Config> = {
           from: { opacity: '0', transform: 'translate3d(0, 14px, 0)' },
           to: { opacity: '1', transform: 'translate3d(0, 0, 0)' },
         },
+        gridPan: {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '32px 32px' },
+        },
+        gradientShift: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
       },
       animation: {
         drift: 'drift 8s ease-in-out infinite',
         'fade-up': 'fadeUp 680ms ease-out both',
+        'grid-pan': 'gridPan 22s linear infinite',
+        'gradient-shift': 'gradientShift 7s ease-in-out infinite',
       },
     },
   },

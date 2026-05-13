@@ -31,7 +31,7 @@ function faqOrdinal(columnIndex: number, itemIndex: number): number {
         <details
           v-for="(faq, itemIndex) in column"
           :key="faq.question"
-          class="surface animate-fade-up group p-5"
+          class="surface landing-interactive-surface animate-fade-up group p-5"
           :style="{ animationDelay: `${(columnIndex * 4 + itemIndex) * 70}ms` }"
         >
           <summary class="flex list-none cursor-pointer items-start justify-between gap-4">

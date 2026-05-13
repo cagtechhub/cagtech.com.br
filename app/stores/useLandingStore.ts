@@ -4,7 +4,9 @@ import { LANDING_NAV_ITEMS, landingHref } from '~/constants/landingScreen'
 import type {
   LandingDifferentiator,
   LandingFaqItem,
+  LandingInitialProject,
   LandingNavItem,
+  LandingPackage,
   LandingService,
   LandingSocialLink,
   LandingTestimonial,
@@ -33,86 +35,142 @@ export const useLandingStore = defineStore('landing', () => {
     LANDING_NAV_ITEMS.map(({ id, label }) => ({ label, href: landingHref(id) }))
   )
 
-  const audiences = ref(['Startups', 'Lideranças em projetos', 'Empresas de tecnologia'])
+  const audiences = ref(['Startups', 'Times de produto', 'Empresas que investem em software web'])
 
   const trustedBrands = ref(['Pieta Tech', 'Gm Bovinos', 'S.G Consultora', 'Nexiqo'])
 
+  const heroCopy = ref({
+    tagline: 'Software web, SEO e landing pages com gestão de projeto',
+    titleMain: 'Desenvolvimento focado em software para sua presença digital',
+    titleAccent: 'sites, SEO e páginas de conversão',
+  })
+
+  const servicesIntro = ref({
+    title: 'Serviços em software para a web',
+    body: 'Atuamos na construção e evolução de produtos digitais leves e performáticos: sites, otimização para buscadores e landing pages orientadas a resultado.',
+  })
+
   const services = ref<LandingService[]>([
     {
-      title: 'Design',
+      title: 'Criação de sites',
       description:
-        'Interfaces orientadas a resultado, com clareza visual, fluxos enxutos e consistência de marca em todos os pontos de contato digitais.',
-      icon: 'M4 4h16v16H4z M8 8h8v8H8z',
+        'Sites institucionais e portais em stack moderna, com código limpo, acessibilidade, performance e base preparada para integrações e evolução contínua.',
+      icon: 'M4 5a2 2 0 012-2h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5z M8 9h8M8 13h6M8 17h4',
     },
     {
-      title: 'Engenharia',
+      title: 'Otimização SEO',
       description:
-        'Ideias virando produtos robustos, com stack moderna, boas práticas de qualidade e arquitetura preparada para escalar com segurança.',
-      icon: 'M12 3v18 M3 12h18 M6 6l12 12 M18 6L6 18',
+        'SEO técnico e de conteúdo: arquitetura de informação, Core Web Vitals, dados estruturados e rituais de publicação para ganhar relevância orgânica.',
+      icon: 'M4 18h16M6 14l3-3 3 2 6-6 M14 6l2 2',
     },
     {
-      title: 'Gestão de projetos',
+      title: 'Landing page',
       description:
-        'Entregas com previsibilidade, acompanhamento contínuo e comunicação transparente para manter metas, prazo e escopo alinhados.',
-      icon: 'M5 5h14v14H5z M8 9h8 M8 12h8 M8 15h5',
+        'Páginas de captura e conversão com experimentação, formulários seguros e integrações (CRM, tagueamento, analytics) pensadas para campanhas e lançamentos.',
+      icon: 'M4 4h16v10H4z M8 18h8M8 14h5',
+    },
+  ])
+
+  const packagesIntro = ref({
+    title: 'Pacotes e investimento',
+    body: 'Escolha o ponto de partida; todos podem evoluir conforme sua operação cresce. Valores marcados como referência devem ser confirmados na proposta após briefing.',
+  })
+
+  const initialProject = ref<LandingInitialProject>({
+    title: 'Projeto inicial em parceria',
+    lead: 'Para o primeiro ciclo, trabalhamos como extensão do seu time: alinhamos escopo técnico, operamos a infraestrutura mínima e conduzimos a gestão do projeto até a entrega.',
+    bullets: [
+      'Suporte na definição e registro de domínio',
+      'Hospedagem em VPS com mensalidade e monitoração básica',
+      'Gestão de projeto: ritos, priorização e transparência de entregas',
+      'Documentação e handoff para sua equipe evoluir o software depois do go-live',
+    ],
+  })
+
+  /** Substitua `R$ X.XXX` pelos valores reais da tabela comercial quando fechados. */
+  const projectPackages = ref<LandingPackage[]>([
+    {
+      name: 'Landing (inicial)',
+      subtitle: 'Entrada rápida no ar com foco em conversão',
+      priceDisplay: 'à partir de R$ 1.250,00',
+      priceFootnote: 'Referência; inclui itens listados após validação de escopo.',
+      includes: [
+        'Landing page em stack web moderna',
+        'Domínio orientado (registro e apontamentos)',
+        'VPS gerenciado para publicação estável',
+        'Gestor de projeto dedicado no ciclo inicial',
+      ],
+      featured: false,
+    },
+    {
+      name: 'Institucional',
+      subtitle: 'Site institucional com SEO em evolução',
+      priceDisplay: 'à partir de R$ 2.500,00',
+      priceFootnote: 'Referência; agrega o pacote Landing onde fizer sentido técnico.',
+      includes: [
+        'Tudo que compõe o pacote Landing (inicial), quando aplicável',
+        'Site institucional ampliado (páginas, conteúdo e navegação)',
+        'Acompanhamento de SEO técnico e de conteúdo em sprints',
+        'Relatórios periódicos de indicadores e backlog priorizado',
+      ],
+      featured: true,
+    },
+    {
+      name: 'Personalizado',
+      subtitle: 'Produto web sob medida',
+      priceDisplay: 'Sob proposta',
+      priceFootnote: 'Escopo aberto: integrações, áreas logadas, APIs e squads conforme demanda.',
+      includes: [
+        'Tudo do pacote Institucional como base, quando couber no produto',
+        'Funcionalidades e integrações específicas do seu negócio',
+        'Arquitetura e governança alinhadas a crescimento e segurança',
+        'Pode incluir squads dedicados, SLA e evolução contínua',
+      ],
+      featured: false,
     },
   ])
 
   const differentiators = ref<LandingDifferentiator[]>([
     {
-      title: 'Expertise',
+      title: 'Foco em software web',
       description:
-        'Time multidisciplinar com domínio real de produto, design e desenvolvimento para resolver desafios digitais com profundidade técnica.',
+        'Priorizamos código sustentável, pipelines claros e produtos que podem evoluir: do site institucional à landing com integrações.',
       icon: 'M12 3l3 6 6 .9-4.5 4.4 1 6.2-5.5-2.9L6.5 20l1-6.2L3 9.9 9 9z',
     },
     {
-      title: 'Foco no cliente',
+      title: 'SEO e performance',
       description:
-        'Cada decisão parte do contexto de negócio e das necessidades reais, com ciclos curtos de feedback e ajustes colaborativos.',
-      icon: 'M7 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-2.8 2.6-5 5.5-5S13 17.2 13 20M11 20c.2-2.5 2.6-4.4 5.5-4.4 2.8 0 5 1.8 5.5 4.4',
-    },
-    {
-      title: 'Soluções orientadas a resultado',
-      description:
-        'Priorizamos impacto mensurável, ligando cada funcionalidade a indicadores concretos de crescimento e eficiência operacional.',
+        'Métricas de busca e velocidade entram desde o desenho técnico, não como adendo — para seu site carregar rápido e ser encontrado.',
       icon: 'M4 18h16M6 14l3-3 3 2 6-6',
     },
     {
-      title: 'Parceria colaborativa',
+      title: 'Entrega com gestão de projeto',
       description:
-        'Atuamos como extensão do seu time, com proximidade estratégica e suporte contínuo para evoluir o produto após o lançamento.',
+        'Transparência de escopo, riscos e entregas; ritos leves que conectam negócio, conteúdo e engenharia de software.',
+      icon: 'M5 5h14v14H5z M8 9h8 M8 12h8 M8 15h5',
+    },
+    {
+      title: 'Parceria de longo prazo',
+      description:
+        'Do projeto inicial (domínio, VPS, acompanhamento) à evolução contínua, permanecemos disponíveis para sustentar seu produto digital.',
       icon: 'M12 3l2.2 4.5L19 8l-3.4 3.3.8 4.7L12 14l-4.4 2 .8-4.7L5 8l4.8-.5z',
     },
   ])
 
   const testimonials = ref<LandingTestimonial[]>([
     {
-      title: 'Nossa presença digital ganhou outro patamar.',
-      quote:
-        'A equipe entregou uma plataforma moderna, intuitiva e focada em conversão. Nossos resultados comerciais cresceram de forma consistente após o lançamento.',
-      name: 'João Silva',
-      role: 'CEO, Boutique Chic',
-    },
-    {
       title: 'Projeto fluido do início ao fim.',
       quote:
-        'Entenderam nossa visão desde o início, com execução precisa e comunicação clara durante todo o projeto. O aplicativo superou nossas expectativas.',
-      name: 'Sara Oliveira',
-      role: 'Fundadora, Hungry Bites',
+        'Entenderam nossa visão desde o início, com execução precisa e comunicação clara durante todo o projeto. O website superou nossas expectativas.',
+      name: 'Ivo Junior',
+      role: 'Co Fundador, GM Bovinos',
     },
     {
       title: 'Fluxo de reservas complexo virou algo simples.',
       quote:
-        'O sistema de reservas ficou rápido, confiável e fácil de operar. A automação reduziu gargalos e melhorou a experiência do nosso cliente final.',
-      name: 'Marcos Thompson',
-      role: 'CEO, EventMasters',
-    },
-    {
-      title: 'Automação que gerou salto real de produtividade.',
-      quote:
-        'Processos manuais foram eliminados e a equipe passou a focar no que gera valor. O ganho operacional ficou evidente nas primeiras semanas.',
-      name: 'Laura Almeida',
-      role: 'COO, ProTech Solutions',
+        'O website ficou rápido, confiável e fácil de operar. Consigo atualizar o conteúdo sem dificuldades e sem precisar de ajuda de programadores.',
+      name: 'Stefanny Gutierres',
+      role: 'Fundadora, S.G Consultora',
     },
   ])
 
@@ -120,17 +178,22 @@ export const useLandingStore = defineStore('landing', () => {
     {
       question: `Quais serviços a ${brandName.value} oferece?`,
       answer:
-        'Design de produto, engenharia full-stack, squads dedicados, discovery, evolução de sistemas legados e suporte contínuo.',
+        'Foco em software para web: criação de sites, otimização SEO, landing pages, além de pacotes que combinam domínio, VPS, gestão de projeto e evolução contínua conforme o escopo.',
+    },
+    {
+      question: 'O que é o “projeto inicial” em parceria?',
+      answer:
+        'É o modelo onde cuidamos juntos da base do seu produto digital: orientação de domínio, hospedagem em VPS com mensalidade, gestão do projeto e entrega de software (site ou landing) com documentação para evolução.',
     },
     {
       question: 'Como vocês ajudam o meu negócio?',
       answer:
-        'Mapeamos oportunidades, aceleramos time-to-market e construímos experiências digitais com impacto em receita e eficiência.',
+        'Colocamos no ar presença digital rápida e mensurável, com SEO e performance em mente, e escalamos para site institucional ou soluções personalizadas quando sua operação exige mais integrações ou times dedicados.',
     },
     {
       question: 'Em quais segmentos vocês atuam?',
       answer:
-        'B2B, varejo, saúde, educação e serviços, adaptando a estratégia ao contexto de cada operação.',
+        'B2B, serviços, varejo, saúde, educação e tecnologia — sempre adaptando stack, conteúdo e SEO ao contexto de cada negócio.',
     },
     {
       question: 'Quanto tempo leva um projeto?',
@@ -140,7 +203,7 @@ export const useLandingStore = defineStore('landing', () => {
     {
       question: 'Vocês usam frameworks específicos?',
       answer:
-        'Trabalhamos com stacks modernas como Nuxt, Vue, Node e integrações API-first, sempre priorizando manutenção e evolução.',
+        'Sim: preferimos stacks modernas para web (por exemplo Nuxt, Vue e Node), integrações API-first e boas práticas de qualidade, sempre com foco em manutenção e evolução do software.',
     },
     {
       question: 'Há suporte após a entrega?',
@@ -155,7 +218,12 @@ export const useLandingStore = defineStore('landing', () => {
     {
       question: 'Fazem manutenção de site ou aplicativo?',
       answer:
-        'Sim. Cobrimos backlog evolutivo, correções, monitoramento e governança técnica recorrente.',
+        'Sim. Cobrimos backlog evolutivo, correções, monitoramento e governança técnica recorrente para sites, landings e aplicações web.',
+    },
+    {
+      question: 'Os valores “R$ X.XXX” nos pacotes são finais?',
+      answer:
+        'São referências de comunicação até fecharmos o escopo no briefing. O orçamento final considera volume de páginas, integrações, SEO e prazos acordados.',
     },
   ])
 
@@ -166,9 +234,9 @@ export const useLandingStore = defineStore('landing', () => {
   })
 
   const contactReasons = ref([
-    'Site ou institucional',
-    'Parceria / consultoria',
-    'App mobile',
+    'Landing / site inicial',
+    'Site institucional + SEO',
+    'Pacote personalizado',
     'Outro assunto',
   ])
 
@@ -204,7 +272,12 @@ export const useLandingStore = defineStore('landing', () => {
     navItems,
     audiences,
     trustedBrands,
+    heroCopy,
+    servicesIntro,
     services,
+    packagesIntro,
+    initialProject,
+    projectPackages,
     differentiators,
     testimonials,
     faqItems,

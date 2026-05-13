@@ -5,6 +5,7 @@
 export const LANDING_ANCHOR = {
   home: 'home',
   services: 'services',
+  packages: 'packages',
   work: 'work',
   process: 'process',
   about: 'about',
@@ -20,6 +21,7 @@ export function landingHref(id: LandingAnchorId): string {
 export const LANDING_NAV_ITEMS = [
   { id: LANDING_ANCHOR.home, label: 'Início' },
   { id: LANDING_ANCHOR.services, label: 'Serviços' },
+  { id: LANDING_ANCHOR.packages, label: 'Pacotes' },
   { id: LANDING_ANCHOR.work, label: 'Trabalhos' },
   { id: LANDING_ANCHOR.process, label: 'Processo' },
   { id: LANDING_ANCHOR.about, label: 'Sobre' },

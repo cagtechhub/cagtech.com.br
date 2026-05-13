@@ -8,6 +8,7 @@ function trimUrl(u: string) {
 export function useSiteSeoHead() {
   const config = useRuntimeConfig()
   const route = useRoute()
+  const consent = useConsentStore()
   const canonicalUrl = useCanonicalUrl()
   const origin = usePublicSiteOrigin()
   const landing = useLandingStore()
@@ -21,7 +22,7 @@ export function useSiteSeoHead() {
   })
 
   const pageTitle = computed(() => {
-    const base = 'Tecnologia e soluções digitais'
+    const base = 'Software web, sites e SEO'
     const loc = locality.value
     return loc ? `${base} — ${loc}` : base
   })
@@ -32,7 +33,7 @@ export function useSiteSeoHead() {
   const metaDescription = computed(() => {
     const loc = locality.value
     const name = siteName.value
-    const core = `${name}: desenvolvimento web, produtos digitais e apoio técnico com foco em performance, segurança e experiência do usuário.`
+    const core = `${name}: software para web — criação de sites, landing pages e otimização SEO, com gestão de projeto e pacotes que incluem domínio, VPS e evolução contínua.`
     const local = loc ? ` Atendimento em ${loc}.` : ' '
     const tail = 'Entre em contato para conversar sobre o seu projeto.'
     const full = `${core}${local}${tail}`
@@ -56,10 +57,11 @@ export function useSiteSeoHead() {
 
   const seoKeywords = computed(() => {
     const base = [
-      'tecnologia',
-      'consultoria',
+      'software web',
+      'criação de sites',
+      'landing page',
+      'SEO',
       'desenvolvimento web',
-      'produtos digitais',
       siteName.value,
     ]
     return base.join(', ')
@@ -97,10 +99,10 @@ export function useSiteSeoHead() {
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
     ]
-    if (ga4.value) {
+    if (ga4.value && consent.allowsMarketing) {
       links.push({ rel: 'preconnect', href: 'https://www.googletagmanager.com' })
     }
-    if (pixel.value) {
+    if (pixel.value && consent.allowsMarketing) {
       links.push({ rel: 'preconnect', href: 'https://connect.facebook.net' })
     }
     return links
@@ -209,6 +211,10 @@ export function useSiteSeoHead() {
           content: noIndex.value
             ? 'noindex, nofollow'
             : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+        },
+        {
+          name: 'google-adsense-account',
+          content: config.public.googleAdsenseAccount || '',
         },
       ],
       link: [

@@ -38,7 +38,30 @@
   }
 
   .brand-button {
-    @apply inline-flex items-center justify-center rounded-control border border-brand-cyan/60 bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-neon;
+    @apply relative inline-flex items-center justify-center overflow-hidden rounded-control border border-brand-cyan/60 bg-brand-gradient px-5 py-2.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-neon;
+  }
+
+  .brand-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-130%);
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.16) 48%,
+      transparent 92%
+    );
+    opacity: 0;
+    transition:
+      transform 0.75s ease,
+      opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .brand-button:hover::after {
+    opacity: 1;
+    transform: translateX(130%);
   }
 
   .ghost-button {
@@ -47,6 +70,19 @@
 
   .field-control {
     @apply w-full rounded-control border border-stroke bg-panel-soft/70 px-4 py-3 text-sm text-copy-strong outline-none placeholder:text-copy-muted/65 focus:border-brand-cyan/70 focus:shadow-[0_0_0_3px_rgba(29,182,253,0.24)];
+  }
+
+  /** Cards e painéis com microinteração “produto digital”. */
+  .landing-interactive-surface {
+    @apply transition duration-300 ease-out will-change-transform;
+  }
+
+  .landing-interactive-surface:hover {
+    @apply -translate-y-0.5 border-brand-cyan/30 shadow-[0_18px_48px_-22px_rgba(29,182,253,0.35)];
+  }
+
+  .landing-interactive-surface:focus-within {
+    @apply border-brand-cyan/35 shadow-[0_18px_48px_-22px_rgba(29,182,253,0.28)];
   }
 }
 
@@ -60,6 +96,19 @@
       linear-gradient(rgba(156, 163, 175, 0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(156, 163, 175, 0.06) 1px, transparent 1px);
     background-size: 32px 32px;
+  }
+
+  /** Grade técnica com deslocamento suave (loop 32px = tile size). */
+  .tech-grid-motion {
+    animation: gridPan 22s linear infinite;
+  }
+
+  /** Destaque em texto com gradiente da marca. */
+  .text-gradient-brand {
+    background-image: theme('backgroundImage.brand-gradient');
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .soft-divider {
@@ -91,5 +140,37 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes gridPan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 32px 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-grid-motion,
+  .animate-drift,
+  .animate-grid-pan,
+  .animate-gradient-shift {
+    animation: none !important;
+  }
+
+  .landing-interactive-surface:hover,
+  .landing-interactive-surface:focus-within {
+    transform: none;
+  }
+
+  .brand-button:hover,
+  .ghost-button:hover {
+    transform: none;
+  }
+
+  .brand-button::after {
+    display: none;
   }
 }

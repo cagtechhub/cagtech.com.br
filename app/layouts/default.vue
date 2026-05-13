@@ -3,6 +3,8 @@
 <template>
   <div class="min-h-screen bg-canvas font-sans text-copy-base antialiased">
     <NuxtRouteAnnouncer />
+    <NotifyStack />
+    <ConsentBanner />
     <slot />
   </div>
 </template>

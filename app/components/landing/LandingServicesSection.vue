@@ -4,15 +4,15 @@ import { storeToRefs } from 'pinia'
 import { LANDING_ANCHOR } from '~/constants/landingScreen'
 
 const landing = useLandingStore()
-const { services } = storeToRefs(landing)
+const { services, servicesIntro } = storeToRefs(landing)
 </script>
 
 <template>
   <section :id="LANDING_ANCHOR.services" class="shell scroll-mt-24 py-8 sm:py-12">
     <div class="section-banner animate-fade-up">
-      <h2 class="section-title">Nossos serviços</h2>
+      <h2 class="section-title">{{ servicesIntro.title }}</h2>
       <p class="section-copy">
-        Fortaleça sua marca com produtos digitais que unem estratégia, design e engenharia em um fluxo de entrega coeso.
+        {{ servicesIntro.body }}
       </p>
     </div>
 
@@ -20,10 +20,10 @@ const { services } = storeToRefs(landing)
       <article
         v-for="(service, index) in services"
         :key="service.title"
-        class="surface animate-fade-up flex h-full flex-col p-6"
+        class="surface landing-interactive-surface group animate-fade-up flex h-full flex-col p-6"
         :style="{ animationDelay: `${index * 110}ms` }"
       >
-        <span class="inline-flex h-12 w-12 items-center justify-center rounded-control border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan">
+        <span class="inline-flex h-12 w-12 items-center justify-center rounded-control border border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan transition duration-300 group-hover:scale-105 group-hover:border-brand-cyan/50 group-hover:shadow-[0_0_28px_-10px_rgba(29,182,253,0.45)]">
           <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
             <path :d="service.icon" />
           </svg>

@@ -29,6 +29,12 @@ export default defineNuxtConfig({
       facebookUrl: '',
       ga4MeasurementId: '',
       metaPixelId: '',
+      googleAdsenseAccount: '',
+    },
+    private: {
+      supabaseUrl: '',
+      supabaseKey: '',
+      supabaseSchema: '',
     },
   },
   pinia: {
@@ -51,12 +57,7 @@ export default defineNuxtConfig({
   /** Dev server atrás de túnel (ngrok): evita “Blocked request … host is not allowed”. */
   vite: {
     server: {
-      allowedHosts: [
-        'localhost',
-        '.ngrok-free.app',
-        '.ngrok.app',
-        '.ngrok.io',
-      ],
+      allowedHosts: ['localhost', '.ngrok-free.app', '.ngrok.app', '.ngrok.io'],
     },
   },
   security: {
@@ -76,19 +77,15 @@ export default defineNuxtConfig({
           'https://connect.facebook.net',
         ],
         'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        'img-src': [
-          "'self'",
-          'data:',
-          'https://*.google-analytics.com',
-          'https://*.facebook.net',
-        ],
+        'img-src': ["'self'", 'data:', 'https://*.google-analytics.com', 'https://*.facebook.net'],
         'frame-src': ["'self'", 'https://www.facebook.com'],
         'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
         'object-src': ["'none'"],
         'base-uri': ["'self'"],
         'form-action': ["'self'"],
         'frame-ancestors': ["'none'"],
-        sandbox: ['allow-scripts', 'allow-same-origin'],
+        /** Sem `allow-forms`, o navegador bloqueia submit de `<form>` (CSP sandbox ≈ iframe sandbox). */
+        sandbox: ['allow-scripts', 'allow-same-origin', 'allow-forms'],
         'report-uri': '/csp-report',
       },
       xFrameOptions: 'DENY',

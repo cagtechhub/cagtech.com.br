@@ -31,3 +31,21 @@ export interface LandingSocialLink {
   label: string
   href: string
 }
+
+/** Destaque do modelo de parceria (domínio, hospedagem, gestão). */
+export interface LandingInitialProject {
+  title: string
+  lead: string
+  bullets: string[]
+}
+
+/** Pacotes comerciais (valores indicativos editáveis na store). */
+export interface LandingPackage {
+  name: string
+  subtitle: string
+  /** Ex.: `R$ 2.490` ou `R$ X.XXX` enquanto não houver tabela fechada. */
+  priceDisplay: string
+  priceFootnote?: string
+  includes: string[]
+  featured?: boolean
+}

@@ -12,6 +12,7 @@ definePageMeta({
     <main>
       <LandingHeroSection />
       <LandingServicesSection />
+      <LandingPackagesSection />
       <LandingWhySection />
       <LandingTestimonialsSection />
       <LandingFaqSection />

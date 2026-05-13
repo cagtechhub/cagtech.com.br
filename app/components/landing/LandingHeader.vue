@@ -11,7 +11,9 @@ const hrefContact = landingHref(LANDING_ANCHOR.contact)
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 border-b border-stroke/80 bg-canvas/85 backdrop-blur-md">
+  <header
+    class="sticky top-0 z-40 border-b border-stroke/80 bg-canvas/85 shadow-[0_14px_44px_-32px_rgba(7,11,20,0.9)] backdrop-blur-md transition-[box-shadow,border-color] duration-300"
+  >
     <div class="shell">
       <div class="flex h-20 items-center justify-between gap-4">
         <a :href="hrefHome" class="inline-flex items-center gap-3">
@@ -23,7 +25,7 @@ const hrefContact = landingHref(LANDING_ANCHOR.contact)
             v-for="item in navItems"
             :key="item.href"
             :href="item.href"
-            class="rounded-control px-3 py-2 text-sm font-medium text-copy-muted transition hover:bg-panel-soft hover:text-copy-strong"
+            class="rounded-control px-3 py-2 text-sm font-medium text-copy-muted transition duration-200 hover:bg-panel-soft hover:text-copy-strong hover:shadow-[0_0_24px_-14px_rgba(29,182,253,0.25)]"
           >
             {{ item.label }}
           </a>

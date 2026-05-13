@@ -1,0 +1,36 @@
+# Produção: `docker compose up --build -d`
+# Variáveis: copie `.env.example` → `.env` e preencha, ou exporte no shell antes do comando.
+# O compose lê o `.env` da raiz automaticamente para interpolação ${VAR}.
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Recomendado no build: canônico e OG no cliente alinham ao domínio real.
+        NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-}
+    image: cagtech-com-br:prod
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: "3000"
+      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-}
+      NUXT_PUBLIC_NO_INDEX: ${NUXT_PUBLIC_NO_INDEX:-false}
+      NUXT_PUBLIC_SEO_LOCALITY: ${NUXT_PUBLIC_SEO_LOCALITY:-}
+      NUXT_PUBLIC_BUSINESS_PHONE: ${NUXT_PUBLIC_BUSINESS_PHONE:-}
+      NUXT_PUBLIC_DEFAULT_OG_IMAGE: ${NUXT_PUBLIC_DEFAULT_OG_IMAGE:-/og-default.png}
+      NUXT_PUBLIC_WHATSAPP_NUMBER: ${NUXT_PUBLIC_WHATSAPP_NUMBER:-}
+      NUXT_PUBLIC_INSTAGRAM_URL: ${NUXT_PUBLIC_INSTAGRAM_URL:-}
+      NUXT_PUBLIC_FACEBOOK_URL: ${NUXT_PUBLIC_FACEBOOK_URL:-}
+      NUXT_PUBLIC_GA4_MEASUREMENT_ID: ${NUXT_PUBLIC_GA4_MEASUREMENT_ID:-}
+      NUXT_PUBLIC_META_PIXEL_ID: ${NUXT_PUBLIC_META_PIXEL_ID:-}
+      NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT: ${NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT:-}
+      NUXT_PRIVATE_SUPABASE_URL: ${NUXT_PRIVATE_SUPABASE_URL:-}
+      NUXT_PRIVATE_SUPABASE_KEY: ${NUXT_PRIVATE_SUPABASE_KEY:-}
+      NUXT_PRIVATE_SUPABASE_SCHEMA: ${NUXT_PRIVATE_SUPABASE_SCHEMA:-}
+    restart: unless-stopped
