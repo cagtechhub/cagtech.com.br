@@ -97,8 +97,6 @@ export default defineNuxtConfig({
         'base-uri': ["'self'"],
         'form-action': ["'self'"],
         'frame-ancestors': ["'none'"],
-        /** Sem `allow-forms`, o navegador bloqueia submit de `<form>` (CSP sandbox ≈ iframe sandbox). */
-        sandbox: ['allow-scripts', 'allow-same-origin', 'allow-forms'],
         'report-uri': '/csp-report',
       },
       xFrameOptions: 'DENY',
