@@ -20,7 +20,8 @@ Diretorios e arquivos relevantes:
 - `app/components/landing/`: secoes da home (IDs de ancora via `app/constants/landingScreen.ts`), incluindo `LandingPackagesSection.vue` (pacotes comerciais).
 - `app/constants/landingScreen.ts`: IDs de secao (`home`, `services`, `packages`, `work`, etc.) e itens do menu (fonte unica para ancoras).
 - `app/plugins/00.consent-hydrate.client.ts`: hidrata `useConsentStore` a partir do `localStorage` antes dos scripts de marketing.
-- `app/plugins/01.site-init.ts`: SEO global (`useSiteSeoHead`) e marketing (`useMarketingSetup`), respeitando consentimento.
+- `app/plugins/01.site-init.ts`: SEO global (`useSiteSeoHead`).
+- `app/plugins/02.marketing-scripts.client.ts`: GA4 / Meta Pixel (injeção estável no `head` + page view em rota), após consentimento.
 - `app/error.vue`: pagina de erro alinhada ao layout.
 - `app/types/landing.ts`: tipos do conteudo da landing (servicos, FAQ, depoimentos, etc.).
 - `app/stores/useLandingStore.ts`: conteudo/dados da landing (navegacao, cards, faq, footer); exporta `faqItems` para SEO.
