@@ -12,13 +12,13 @@ services:
         NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-}
     image: cagtech-com-br:prod
     ports:
-      - "${WEB_PORT:-3001}:3000"
+      - "${WEB_PORT:-3000}:3000"
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
-      PORT: "3001"
+      PORT: "3000"
       NITRO_HOST: 0.0.0.0
-      NITRO_PORT: "3001"
+      NITRO_PORT: "3000"
       NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-}
       NUXT_PUBLIC_NO_INDEX: ${NUXT_PUBLIC_NO_INDEX:-false}
       NUXT_PUBLIC_SEO_LOCALITY: ${NUXT_PUBLIC_SEO_LOCALITY:-}
