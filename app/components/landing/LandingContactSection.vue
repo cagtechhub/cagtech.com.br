@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import z from 'zod'
 
 import { LANDING_ANCHOR } from '~/constants/landingScreen'
 
@@ -28,18 +29,45 @@ const budgetFormatted = computed(() =>
 const updateBudgetValue = (value: number) => {
   contactForm.value.budget = value
 }
+const schema = z.object({
+  fullName: z.string().min(1),
+  email: z.email(),
+  reason: z.array(z.string()).min(1),
+  budget: z.number().min(BUDGET_MIN).max(BUDGET_MAX),
+  message: z.string().min(1).max(1000),
+})
 
-const sendContactForm = async () => {
-  const { data } = await useFetch('/api/contact', {
+const contactFormSchema = toTypedSchema(schema)
+
+const onSubmit = async (form: z.infer<typeof schema>) => {
+  const response = await $fetch('/api/contact', {
     method: 'POST',
-    body: contactForm.value,
+    body: {
+      fullName: form.fullName,
+      email: form.email,
+      reason: form.reason,
+      budget: form.budget,
+      message: form.message,
+    },
   })
-  console.log(data)
-  // useNotify().success(
-  //   'Obrigado pelo contato!',
-  //   'Em breve entraremos em contato para conversar sobre o seu projeto.',
-  //   5_000
-  // )
+
+  if (response.success) {
+    useNotify().success(
+      'Obrigado pelo contato!',
+      'Em breve entraremos em contato para conversar sobre o seu projeto.',
+      5_000
+    )
+    contactForm.value = {
+      fullName: '',
+      email: '',
+      reason: [] as string[],
+      budget: 10_000,
+      message: '',
+    }
+    return
+  }
+
+  useNotify().error('Falha ao enviar o contato', 'Por favor, tente novamente mais tarde.')
 }
 </script>
 
@@ -62,11 +90,11 @@ const sendContactForm = async () => {
       id="contact-form"
       class="surface landing-interactive-surface mt-6 animate-fade-up p-6 sm:p-8"
     >
-      <form class="space-y-5" method="post" @submit.prevent="sendContactForm">
+      <VeeForm class="space-y-5" @submit="onSubmit" :validation-schema="contactFormSchema">
         <div class="grid gap-4 sm:grid-cols-2">
           <label class="space-y-2 text-sm font-medium text-copy-strong">
             Nome completo<br />
-            <input
+            <VeeField
               v-model="contactForm.fullName"
               type="text"
               name="fullName"
@@ -74,10 +102,11 @@ const sendContactForm = async () => {
               class="field-control"
               required
             />
+            <VeeErrorMessage name="fullName" />
           </label>
           <label class="space-y-2 text-sm font-medium text-copy-strong">
             E-mail<br />
-            <input
+            <VeeField
               v-model="contactForm.email"
               type="email"
               name="email"
@@ -96,7 +125,7 @@ const sendContactForm = async () => {
               :key="reason"
               class="flex cursor-pointer items-center gap-2 rounded-control border border-stroke bg-panel/70 px-3 py-2 text-sm text-copy-base"
             >
-              <input
+              <VeeField
                 v-model="contactForm.reason"
                 type="checkbox"
                 name="reason"
@@ -124,7 +153,7 @@ const sendContactForm = async () => {
               {{ budgetFormatted }}
             </output>
           </div>
-          <input
+          <VeeField
             id="budget"
             v-model.number="contactForm.budget"
             type="range"
@@ -145,7 +174,8 @@ const sendContactForm = async () => {
 
         <label class="block space-y-2 text-sm font-medium text-copy-strong">
           Mensagem<br />
-          <textarea
+          <VeeField
+            type="textarea"
             v-model="contactForm.message"
             name="message"
             rows="5"
@@ -157,7 +187,7 @@ const sendContactForm = async () => {
         <div class="flex justify-center pt-1">
           <button type="submit" class="brand-button min-w-36">Enviar</button>
         </div>
-      </form>
+      </VeeForm>
     </div>
   </section>
 </template>

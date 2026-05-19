@@ -4,7 +4,24 @@ export default defineNuxtConfig({
   srcDir: 'app/',
   compatibilityDate: '2026-04-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxt/eslint', 'nuxt-security'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@nuxt/eslint',
+    'nuxt-security',
+    [
+      '@vee-validate/nuxt',
+      {
+        autoImports: true,
+        componentNames: {
+          Form: 'VeeForm',
+          Field: 'VeeField',
+          FieldArray: 'VeeFieldArray',
+          ErrorMessage: 'VeeErrorMessage',
+        },
+      },
+    ],
+  ],
   runtimeConfig: {
     public: {
       /** URL canônica do site (ex.: https://www.cagtech.com.br). Recomendado em produção. */
