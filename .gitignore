@@ -25,7 +25,6 @@ logs
 
 # Prisma / build dos workspaces
 apps/backend/dist
-apps/backend/src/infrastructure/prisma/output
 packages/shared/dist
 
 gha_deploy*
