@@ -240,13 +240,20 @@ export const useLandingStore = defineStore('landing', () => {
     'Outro assunto',
   ])
 
-  const socialLinks = ref<LandingSocialLink[]>([
-    // { label: 'Facebook', href: 'https://facebook.com' },
-    // { label: 'X', href: 'https://x.com' },
-    // { label: 'LinkedIn', href: 'https://linkedin.com' },
-  ])
+  const socialLinks = computed<LandingSocialLink[]>(() => {
+    const items: LandingSocialLink[] = []
+    const instagram = String(config.public.instagramUrl || '').trim()
+    const facebook = String(config.public.facebookUrl || '').trim()
+    const linkedin = String(config.public.linkedinUrl || '').trim()
+    if (instagram) items.push({ label: 'IG', href: instagram })
+    if (facebook) items.push({ label: 'FB', href: facebook })
+    if (linkedin) items.push({ label: 'IN', href: linkedin })
+    return items
+  })
 
   const footerEmail = computed(() => {
+    const fromSettings = String(config.public.contactEmail || '').trim()
+    if (fromSettings) return fromSettings
     const normalized = brandName.value
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '')

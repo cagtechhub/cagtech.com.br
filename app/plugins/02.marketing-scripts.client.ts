@@ -107,6 +107,9 @@ export default defineNuxtPlugin(() => {
     if (!consent.allowsMarketing) {
       return
     }
+    if (router.currentRoute.value.path.startsWith('/admin')) {
+      return
+    }
     const g = gaId.value
     const p = pixelId.value
     if (g) {
@@ -133,6 +136,9 @@ export default defineNuxtPlugin(() => {
   let skipNextAfterEach = true
   router.afterEach((to) => {
     if (!consent.allowsMarketing) {
+      return
+    }
+    if (to.path.startsWith('/admin')) {
       return
     }
     if (skipNextAfterEach) {

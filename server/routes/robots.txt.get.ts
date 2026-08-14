@@ -1,20 +1,16 @@
 import { getRequestURL } from 'h3'
 
-import { noIndexFromRuntimeConfig } from '../utils/no-index'
-
-export default defineEventHandler((event) => {
-  const config = useRuntimeConfig(event)
-  const noIndex = noIndexFromRuntimeConfig(config as { public?: Record<string, unknown> })
-  const configured = String(config.public?.siteUrl || '')
-    .trim()
-    .replace(/\/$/, '')
+export default defineEventHandler(async (event) => {
+  const settings = await resolveSiteSettings(event)
+  const configured = String(settings.siteUrl || '').trim().replace(/\/$/, '')
   const origin = configured || getRequestURL(event).origin
 
   const lines = ['User-Agent: *']
-  if (noIndex) {
+  if (settings.noIndex) {
     lines.push('Disallow: /')
   } else {
     lines.push('Allow: /')
+    lines.push('Disallow: /admin')
     lines.push('')
     lines.push(`Sitemap: ${origin}/sitemap.xml`)
   }

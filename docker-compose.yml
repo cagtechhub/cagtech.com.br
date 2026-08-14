@@ -1,6 +1,6 @@
-# Produção: `docker compose up --build -d`
-# Variáveis: copie `.env.example` → `.env` e preencha, ou exporte no shell antes do comando.
-# O compose lê o `.env` da raiz automaticamente para interpolação ${VAR}.
+# Produção na OS (Traefik + Supabase). Sem Postgres local. Sem ports no host.
+# Pré-requisitos: docker network create web
+# API de contato vive no Nitro (mesmo container). Sem serviço backend.
 
 services:
   web:
@@ -8,18 +8,33 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # Recomendado no build: canônico e OG no cliente alinham ao domínio real.
-        NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-}
-    image: cagtech-com-br:prod
-    ports:
-      - "${WEB_PORT:-3000}:3000"
+        NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL}
+        NUXT_PUBLIC_NO_INDEX: ${NUXT_PUBLIC_NO_INDEX:-false}
+        NUXT_PUBLIC_SEO_LOCALITY: ${NUXT_PUBLIC_SEO_LOCALITY:-}
+        NUXT_PUBLIC_BUSINESS_PHONE: ${NUXT_PUBLIC_BUSINESS_PHONE:-}
+        NUXT_PUBLIC_DEFAULT_OG_IMAGE: ${NUXT_PUBLIC_DEFAULT_OG_IMAGE:-/og-default.png}
+        NUXT_PUBLIC_WHATSAPP_NUMBER: ${NUXT_PUBLIC_WHATSAPP_NUMBER:-}
+        NUXT_PUBLIC_INSTAGRAM_URL: ${NUXT_PUBLIC_INSTAGRAM_URL:-}
+        NUXT_PUBLIC_FACEBOOK_URL: ${NUXT_PUBLIC_FACEBOOK_URL:-}
+        NUXT_PUBLIC_GA4_MEASUREMENT_ID: ${NUXT_PUBLIC_GA4_MEASUREMENT_ID:-}
+        NUXT_PUBLIC_META_PIXEL_ID: ${NUXT_PUBLIC_META_PIXEL_ID:-}
+        NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT: ${NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT:-}
+        NUXT_PUBLIC_SUPABASE_URL: ${NUXT_PUBLIC_SUPABASE_URL:-}
+        NUXT_PUBLIC_SUPABASE_ANON_KEY: ${NUXT_PUBLIC_SUPABASE_ANON_KEY:-}
+        NUXT_PUBLIC_CONTACT_EMAIL: ${NUXT_PUBLIC_CONTACT_EMAIL:-}
+        NUXT_PUBLIC_LINKEDIN_URL: ${NUXT_PUBLIC_LINKEDIN_URL:-}
+    image: cagtech-web:prod
+    container_name: cagtech-web
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
-      PORT: "3000"
+      PORT: '3000'
       NITRO_HOST: 0.0.0.0
-      NITRO_PORT: "3000"
-      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-}
+      NITRO_PORT: '3000'
+      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL}
       NUXT_PUBLIC_NO_INDEX: ${NUXT_PUBLIC_NO_INDEX:-false}
       NUXT_PUBLIC_SEO_LOCALITY: ${NUXT_PUBLIC_SEO_LOCALITY:-}
       NUXT_PUBLIC_BUSINESS_PHONE: ${NUXT_PUBLIC_BUSINESS_PHONE:-}
@@ -30,7 +45,28 @@ services:
       NUXT_PUBLIC_GA4_MEASUREMENT_ID: ${NUXT_PUBLIC_GA4_MEASUREMENT_ID:-}
       NUXT_PUBLIC_META_PIXEL_ID: ${NUXT_PUBLIC_META_PIXEL_ID:-}
       NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT: ${NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT:-}
+      NUXT_PUBLIC_SUPABASE_URL: ${NUXT_PUBLIC_SUPABASE_URL:-}
+      NUXT_PUBLIC_SUPABASE_ANON_KEY: ${NUXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      NUXT_PUBLIC_CONTACT_EMAIL: ${NUXT_PUBLIC_CONTACT_EMAIL:-}
+      NUXT_PUBLIC_LINKEDIN_URL: ${NUXT_PUBLIC_LINKEDIN_URL:-}
       NUXT_PRIVATE_SUPABASE_URL: ${NUXT_PRIVATE_SUPABASE_URL:-}
       NUXT_PRIVATE_SUPABASE_KEY: ${NUXT_PRIVATE_SUPABASE_KEY:-}
-      NUXT_PRIVATE_SUPABASE_SCHEMA: ${NUXT_PRIVATE_SUPABASE_SCHEMA:-}
-    restart: unless-stopped
+      NUXT_PRIVATE_SUPABASE_SCHEMA: ${NUXT_PRIVATE_SUPABASE_SCHEMA:-cagtech}
+      NUXT_ADMIN_ALLOWED_EMAILS: ${NUXT_ADMIN_ALLOWED_EMAILS:-}
+      NUXT_ADMIN_REQUIRE_ROLE: ${NUXT_ADMIN_REQUIRE_ROLE:-false}
+    networks:
+      - default
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:-web}
+      - traefik.http.routers.cagtech-web.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)
+      - traefik.http.routers.cagtech-web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.cagtech-web.tls=true
+      - traefik.http.routers.cagtech-web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.cagtech-web.loadbalancer.server.port=3000
+
+networks:
+  traefik:
+    name: ${TRAEFIK_NETWORK:-web}
+    external: true

@@ -30,44 +30,52 @@ const updateBudgetValue = (value: number) => {
   contactForm.value.budget = value
 }
 const schema = z.object({
-  fullName: z.string().min(1),
-  email: z.email(),
-  reason: z.array(z.string()).min(1),
-  budget: z.number().min(BUDGET_MIN).max(BUDGET_MAX),
-  message: z.string().min(1).max(1000),
+  fullName: z.string().min(1, 'Nome completo é obrigatório'),
+  email: z.email('E-mail inválido'),
+  reason: z.array(z.string()).min(1, 'Motivo do contato é obrigatório'),
+  budget: z
+    .number()
+    .min(BUDGET_MIN, 'Orçamento previsto deve ser maior que R$ 1.250')
+    .max(BUDGET_MAX, 'Orçamento previsto deve ser menor que R$ 25.000'),
+  message: z
+    .string()
+    .min(1, 'Mensagem é obrigatória')
+    .max(1000, 'Mensagem deve ter no máximo 1000 caracteres'),
 })
 
 const contactFormSchema = toTypedSchema(schema)
 
 const onSubmit = async (form: z.infer<typeof schema>) => {
-  const response = await $fetch('/api/contact', {
-    method: 'POST',
-    body: {
-      fullName: form.fullName,
-      email: form.email,
-      reason: form.reason,
-      budget: form.budget,
-      message: form.message,
-    },
-  })
+  try {
+    const response = await $fetch('/api/contact', {
+      method: 'POST',
+      body: {
+        fullName: form.fullName,
+        email: form.email,
+        reason: form.reason,
+        budget: form.budget,
+        message: form.message,
+      },
+    })
 
-  if (response.success) {
-    useNotify().success(
-      'Obrigado pelo contato!',
-      'Em breve entraremos em contato para conversar sobre o seu projeto.',
-      5_000
-    )
-    contactForm.value = {
-      fullName: '',
-      email: '',
-      reason: [] as string[],
-      budget: 10_000,
-      message: '',
+    if (response.success) {
+      useNotify().success(
+        'Obrigado pelo contato!',
+        'Em breve entraremos em contato para conversar sobre o seu projeto.',
+        5_000
+      )
+      contactForm.value = {
+        fullName: '',
+        email: '',
+        reason: [] as string[],
+        budget: 10_000,
+        message: '',
+      }
+      return
     }
-    return
+  } catch {
+    useNotify().error('Falha ao enviar o contato', 'Por favor, tente novamente mais tarde.')
   }
-
-  useNotify().error('Falha ao enviar o contato', 'Por favor, tente novamente mais tarde.')
 }
 </script>
 
@@ -114,6 +122,7 @@ const onSubmit = async (form: z.infer<typeof schema>) => {
               class="field-control"
               required
             />
+            <VeeErrorMessage name="email" />
           </label>
         </div>
 
@@ -133,6 +142,7 @@ const onSubmit = async (form: z.infer<typeof schema>) => {
                 :value="reason"
               />
               <span>{{ reason }}</span>
+              <VeeErrorMessage name="reason" />
             </label>
           </div>
         </fieldset>
@@ -182,6 +192,7 @@ const onSubmit = async (form: z.infer<typeof schema>) => {
             placeholder="Digite aqui"
             class="field-control resize-y"
           />
+          <VeeErrorMessage name="message" />
         </label>
 
         <div class="flex justify-center pt-1">

@@ -1,7 +1,5 @@
 import { getRequestURL } from 'h3'
 
-import { noIndexFromRuntimeConfig } from '../utils/no-index'
-
 function escapeXml(s: string) {
   return s
     .replace(/&/g, '&amp;')
@@ -10,17 +8,15 @@ function escapeXml(s: string) {
     .replace(/"/g, '&quot;')
 }
 
-export default defineEventHandler((event) => {
-  const config = useRuntimeConfig(event)
-  if (noIndexFromRuntimeConfig(config as { public?: Record<string, unknown> })) {
+export default defineEventHandler(async (event) => {
+  const settings = await resolveSiteSettings(event)
+  if (settings.noIndex) {
     setResponseStatus(event, 404)
     setResponseHeader(event, 'content-type', 'text/plain; charset=utf-8')
     return 'Not found'
   }
 
-  const configured = String(config.public?.siteUrl || '')
-    .trim()
-    .replace(/\/$/, '')
+  const configured = String(settings.siteUrl || '').trim().replace(/\/$/, '')
   const origin = configured || getRequestURL(event).origin
   const home = `${origin}/`
 

@@ -4,6 +4,12 @@ function trimUrl(u: string) {
   return u.trim().replace(/\/$/, '')
 }
 
+function limitSeoText(value: string, max: number) {
+  const trimmed = value.trim()
+  if (trimmed.length <= max) return trimmed
+  return `${trimmed.slice(0, max - 1).trimEnd()}…`
+}
+
 /** Metadados globais: canônico, robots, Open Graph, Twitter e Schema.org. */
 export function useSiteSeoHead() {
   const config = useRuntimeConfig()
@@ -13,12 +19,13 @@ export function useSiteSeoHead() {
   const origin = usePublicSiteOrigin()
   const landing = useLandingStore()
 
-  const siteName = computed(() => String(config.public.siteName || 'CAG Tech').trim())
+  const isAdmin = computed(() => (route.path || '').startsWith('/admin'))
+  const siteName = computed(() => String(config.public.siteName || 'CAG Tech').trim() || 'CAG Tech')
   const locality = computed(() => String(config.public.seoLocality || '').trim())
   const noIndex = computed(() => {
+    if (isAdmin.value) return true
     const v = config.public.noIndex as boolean | string | undefined
-    if (v === true || v === 'true' || v === '1') return true
-    return false
+    return v === true || v === 'true' || v === '1'
   })
 
   const pageTitle = computed(() => {
@@ -27,8 +34,9 @@ export function useSiteSeoHead() {
     return loc ? `${base} — ${loc}` : base
   })
 
-  /** Título do documento e redes (alinhado ao `siteName` configurável). */
-  const documentTitle = computed(() => `${siteName.value} | ${pageTitle.value}`)
+  const documentTitle = computed(() =>
+    limitSeoText(`${siteName.value} | ${pageTitle.value}`, 65),
+  )
 
   const metaDescription = computed(() => {
     const loc = locality.value
@@ -36,23 +44,23 @@ export function useSiteSeoHead() {
     const core = `${name}: software para web — criação de sites, landing pages e otimização SEO, com gestão de projeto e pacotes que incluem domínio, VPS e evolução contínua.`
     const local = loc ? ` Atendimento em ${loc}.` : ' '
     const tail = 'Entre em contato para conversar sobre o seu projeto.'
-    const full = `${core}${local}${tail}`
-    return full.length > 160 ? `${full.slice(0, 157)}…` : full
+    return limitSeoText(`${core}${local}${tail}`, 160)
   })
 
   const ogImage = computed(() => {
+    const explicit = String(config.public.defaultOgImageUrl || '').trim()
+    if (/^https?:\/\//i.test(explicit)) return explicit
     const o = origin.value
     if (!o) return ''
-    const path = String(config.public.defaultOgImagePath || '/og-default.png').trim()
+    const path = (explicit.startsWith('/') ? explicit : String(config.public.defaultOgImagePath || '/og-default.png').trim()) ||
+      '/og-default.png'
     return `${trimUrl(o)}${path.startsWith('/') ? path : `/${path}`}`
   })
 
-  const ogTitle = documentTitle
-
   const sameAs = computed(() =>
-    [config.public.instagramUrl, config.public.facebookUrl]
+    [config.public.instagramUrl, config.public.facebookUrl, config.public.linkedinUrl]
       .map((u) => String(u || '').trim())
-      .filter((u) => u.length > 0 && /^https?:\/\//i.test(u))
+      .filter((u) => u.length > 0 && /^https?:\/\//i.test(u)),
   )
 
   const seoKeywords = computed(() => {
@@ -64,6 +72,7 @@ export function useSiteSeoHead() {
       'desenvolvimento web',
       siteName.value,
     ]
+    if (locality.value) base.push(locality.value)
     return base.join(', ')
   })
 
@@ -75,7 +84,7 @@ export function useSiteSeoHead() {
     ogSiteName: siteName,
     ogType: 'website',
     ogLocale: 'pt_BR',
-    ogTitle,
+    ogTitle: documentTitle,
     ogDescription: metaDescription,
     ogImage,
     ogImageWidth: '1200',
@@ -84,7 +93,7 @@ export function useSiteSeoHead() {
     ogImageAlt: `${siteName.value} — identidade visual`,
     ogUrl: canonicalUrl,
     twitterCard: 'summary_large_image',
-    twitterTitle: ogTitle,
+    twitterTitle: documentTitle,
     twitterDescription: metaDescription,
     twitterImage: ogImage,
     themeColor: '#070B14',
@@ -99,16 +108,18 @@ export function useSiteSeoHead() {
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
     ]
-    if (ga4.value && consent.allowsMarketing) {
+    if (ga4.value && consent.allowsMarketing && !isAdmin.value) {
       links.push({ rel: 'preconnect', href: 'https://www.googletagmanager.com' })
     }
-    if (pixel.value && consent.allowsMarketing) {
+    if (pixel.value && consent.allowsMarketing && !isAdmin.value) {
       links.push({ rel: 'preconnect', href: 'https://connect.facebook.net' })
     }
     return links
   })
 
   const schemaNodes = computed(() => {
+    if (isAdmin.value) return []
+
     const url = canonicalUrl.value || (origin.value ? `${trimUrl(origin.value)}/` : '')
     if (!url) return []
 
@@ -120,6 +131,20 @@ export function useSiteSeoHead() {
       ? String(config.public.businessPhone || '').replace(/\D/g, '')
       : String(config.public.whatsappNumber || config.public.whatsappPhone || '').replace(/\D/g, '')
     const tel = phoneDigits ? `+${phoneDigits}` : ''
+    const contactEmail = String(config.public.contactEmail || '').trim()
+    const lat = Number(String(config.public.geoLatitude || '').trim())
+    const lng = Number(String(config.public.geoLongitude || '').trim())
+    const hasGeo = Number.isFinite(lat) && Number.isFinite(lng) && String(config.public.geoLatitude || '').trim() !== ''
+
+    const contactPoint: Record<string, unknown> = {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      areaServed: 'BR',
+      availableLanguage: 'Portuguese',
+    }
+    if (contactEmail) contactPoint.email = contactEmail
+    if (tel) contactPoint.telephone = tel
+    const hasContactPoint = Boolean(contactEmail || tel)
 
     const organization: Record<string, unknown> = {
       '@type': 'Organization',
@@ -136,13 +161,12 @@ export function useSiteSeoHead() {
       }
     }
 
-    if (sameAs.value.length) {
-      organization.sameAs = [...sameAs.value]
-    }
+    if (hasContactPoint) organization.contactPoint = contactPoint
+    if (sameAs.value.length) organization.sameAs = [...sameAs.value]
 
     const graph: Array<Record<string, unknown>> = [organization]
 
-    if (tel || addressLine || locality.value) {
+    if (tel || addressLine || locality.value || hasGeo) {
       const postal: Record<string, string> = {
         '@type': 'PostalAddress',
         addressCountry: 'BR',
@@ -151,14 +175,20 @@ export function useSiteSeoHead() {
       if (locality.value) postal.addressLocality = locality.value
 
       graph.push({
-        '@type': 'LocalBusiness',
+        '@type': 'ProfessionalService',
         '@id': `${url}#localbusiness`,
         name: siteName.value,
         url,
         description: metaDescription.value,
         parentOrganization: { '@id': `${url}#organization` },
         ...(tel ? { telephone: tel } : {}),
+        ...(contactEmail ? { email: contactEmail } : {}),
         ...(addressLine || locality.value ? { address: postal } : {}),
+        ...(hasGeo
+          ? { geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng } }
+          : {}),
+        ...(sameAs.value.length ? { sameAs: [...sameAs.value] } : {}),
+        ...(ogImage.value ? { image: ogImage.value } : {}),
       })
     }
 
@@ -170,6 +200,19 @@ export function useSiteSeoHead() {
       description: metaDescription.value,
       inLanguage: 'pt-BR',
       publisher: { '@id': `${url}#organization` },
+    })
+
+    graph.push({
+      '@type': 'BreadcrumbList',
+      '@id': `${url}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Início',
+          item: url,
+        },
+      ],
     })
 
     const path = route.path || '/'
@@ -218,12 +261,16 @@ export function useSiteSeoHead() {
         },
       ],
       link: [
-        ...(canon ? [{ rel: 'canonical' as const, href: canon }] : []),
+        ...(canon && !isAdmin.value ? [{ rel: 'canonical' as const, href: canon }] : []),
         ...hreflang,
         ...preconnects.value,
         {
           rel: 'icon',
           type: 'image/png',
+          href: '/favicon.png',
+        },
+        {
+          rel: 'apple-touch-icon',
           href: '/favicon.png',
         },
       ],
