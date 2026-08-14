@@ -45,6 +45,7 @@ Diretórios relevantes:
 - `TRAEFIK_NETWORK=web` (nunca `host`). Alias www só no site (`cagtech-www`).
 - Auth do painel: JWT Supabase + `ADMIN_ALLOWED_EMAILS`.
 - Node **>= 26** em engines, `.nvmrc`, Docker web/API e `@types/node`.
+- Docker web: recopy só `vue`/`@vue`; **rm** stubs `birpc`/`unhead`/`.nitro` (padrão razconms). `optimizeDeps` dos Vue DevTools (gutierres). Devtools off em production.
 
 ## 5) Manutenção
 1. Copy/CMS: painel ou fallback na store.

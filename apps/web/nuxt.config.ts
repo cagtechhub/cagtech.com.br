@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     transpile: ['@cagtech/shared'],
   },
   compatibilityDate: '2026-04-01',
-  devtools: { enabled: true },
+  /** Só em `yarn dev`. Em Docker (`NODE_ENV=production`) o Nitro não deve empacotar Vue DevTools/`birpc`. */
+  devtools: { enabled: process.env.NODE_ENV !== 'production' },
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
@@ -105,6 +106,10 @@ export default defineNuxtConfig({
   vite: {
     server: {
       allowedHosts: ['localhost', '.ngrok-free.app', '.ngrok.app', '.ngrok.io'],
+    },
+    /** Gutierres: evita trace incompleto de Vue DevTools/`birpc` no bundle Nitro. */
+    optimizeDeps: {
+      include: ['@vue/devtools-core', '@vue/devtools-kit'],
     },
   },
   security: {

@@ -1,4 +1,7 @@
-# Runtime mantém monorepo + node_modules da raiz. Só recopy vue/@vue incompletos.
+# Runtime mantém monorepo + node_modules da raiz (padrão razconms / gutierres / gmbovinos).
+# O Nitro às vezes deixa vue/@vue incompletos (sem index.mjs) e stubs (birpc, unhead)
+# que SOMBREIAM o hoist da raiz → ERR_MODULE_NOT_FOUND. Só recopy vue/@vue;
+# os stubs quebrados são removidos para o Node resolver em /app/node_modules.
 
 ARG NODE_VERSION=26
 
@@ -68,6 +71,9 @@ RUN yarn workspace @cagtech/shared build \
   && rm -rf apps/web/.output/server/node_modules/vue \
             apps/web/.output/server/node_modules/@vue \
             apps/web/.output/server/node_modules/.nitro \
+            apps/web/.output/server/node_modules/birpc \
+            apps/web/.output/server/node_modules/unhead \
+            apps/web/.output/server/node_modules/@unhead \
   && cp -a node_modules/vue apps/web/.output/server/node_modules/vue \
   && cp -a node_modules/@vue apps/web/.output/server/node_modules/@vue \
   && test -f apps/web/.output/server/node_modules/vue/package.json
