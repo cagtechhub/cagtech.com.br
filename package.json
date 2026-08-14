@@ -1,42 +1,38 @@
 {
   "name": "cagtech-com-br",
-  "type": "module",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
-  "dependencies": {
-    "@nuxt/eslint": "1.15.2",
-    "@pinia/nuxt": "^0.11.3",
-    "@supabase/supabase-js": "^2.105.4",
-    "@unhead/schema-org": "^3.0.4",
-    "@vee-validate/zod": "^4.15.1",
-    "nuxt": "^4.4.2",
-    "nuxt-security": "2.5.1",
-    "pinia": "^3.0.4",
-    "uuidv7": "^1.2.1",
-    "vee-validate": "^4.15.1",
-    "vue": "^3.5.32",
-    "vue-router": "^5.0.4",
-    "zod": "^4.4.3"
+    "dev": "concurrently -n web,api -c cyan,magenta \"yarn workspace @cagtech/web dev\" \"yarn workspace @cagtech/backend dev\"",
+    "dev:web": "yarn workspace @cagtech/web dev",
+    "dev:api": "yarn workspace @cagtech/backend dev",
+    "build": "yarn workspace @cagtech/shared build && yarn workspace @cagtech/backend build && yarn workspace @cagtech/web build",
+    "lint": "yarn workspace @cagtech/shared lint && yarn workspace @cagtech/backend lint && yarn workspace @cagtech/web lint",
+    "lint:fix": "yarn workspace @cagtech/web lint:fix",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "db:generate": "yarn workspace @cagtech/backend db:generate",
+    "db:migrate": "yarn workspace @cagtech/backend db:migrate"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.14.0",
-    "@vee-validate/nuxt": "^4.15.1",
-    "eslint": "^9.39.0",
-    "eslint-config-prettier": "^10.1.0",
-    "prettier": "^3.6.0",
-    "typescript": "^5.9.0"
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.0"
+  },
+  "resolutions": {
+    "vue": "3.5.40",
+    "@vue/compiler-core": "3.5.40",
+    "@vue/compiler-dom": "3.5.40",
+    "@vue/compiler-sfc": "3.5.40",
+    "@vue/reactivity": "3.5.40",
+    "@vue/runtime-core": "3.5.40",
+    "@vue/runtime-dom": "3.5.40",
+    "@vue/server-renderer": "3.5.40",
+    "@vue/shared": "3.5.40"
   }
 }

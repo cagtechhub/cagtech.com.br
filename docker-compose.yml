@@ -1,14 +1,47 @@
 # Produção na OS (Traefik + Supabase). Sem Postgres local. Sem ports no host.
 # Pré-requisitos: docker network create web
-# API de contato vive no Nitro (mesmo container). Sem serviço backend.
+# SSR: NUXT_API_BASE usa container_name único (não o service name `backend`).
 
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    image: cagtech-api:prod
+    container_name: cagtech-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: '3001'
+      DATABASE_URL: ${DATABASE_URL}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      WEB_ORIGIN: ${NUXT_PUBLIC_SITE_URL}
+      ADMIN_ALLOWED_EMAILS: ${ADMIN_ALLOWED_EMAILS:-}
+      ADMIN_REQUIRE_ROLE: ${ADMIN_REQUIRE_ROLE:-false}
+    networks:
+      - default
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:-web}
+      - traefik.http.routers.cagtech-api.rule=Host(`${API_DOMAIN}`)
+      - traefik.http.routers.cagtech-api.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.cagtech-api.tls=true
+      - traefik.http.routers.cagtech-api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.cagtech-api.loadbalancer.server.port=3001
+
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/web/Dockerfile
       args:
+        NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE}
         NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL}
+        NUXT_PUBLIC_SITE_NAME: ${NUXT_PUBLIC_SITE_NAME:-CAG Tech}
         NUXT_PUBLIC_NO_INDEX: ${NUXT_PUBLIC_NO_INDEX:-false}
         NUXT_PUBLIC_SEO_LOCALITY: ${NUXT_PUBLIC_SEO_LOCALITY:-}
         NUXT_PUBLIC_BUSINESS_PHONE: ${NUXT_PUBLIC_BUSINESS_PHONE:-}
@@ -26,6 +59,8 @@ services:
     image: cagtech-web:prod
     container_name: cagtech-web
     restart: unless-stopped
+    depends_on:
+      - backend
     env_file:
       - .env
     environment:
@@ -34,36 +69,28 @@ services:
       PORT: '3000'
       NITRO_HOST: 0.0.0.0
       NITRO_PORT: '3000'
+      NUXT_API_BASE: http://cagtech-backend:3001
+      NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE}
       NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL}
       NUXT_PUBLIC_NO_INDEX: ${NUXT_PUBLIC_NO_INDEX:-false}
-      NUXT_PUBLIC_SEO_LOCALITY: ${NUXT_PUBLIC_SEO_LOCALITY:-}
-      NUXT_PUBLIC_BUSINESS_PHONE: ${NUXT_PUBLIC_BUSINESS_PHONE:-}
-      NUXT_PUBLIC_DEFAULT_OG_IMAGE: ${NUXT_PUBLIC_DEFAULT_OG_IMAGE:-/og-default.png}
-      NUXT_PUBLIC_WHATSAPP_NUMBER: ${NUXT_PUBLIC_WHATSAPP_NUMBER:-}
-      NUXT_PUBLIC_INSTAGRAM_URL: ${NUXT_PUBLIC_INSTAGRAM_URL:-}
-      NUXT_PUBLIC_FACEBOOK_URL: ${NUXT_PUBLIC_FACEBOOK_URL:-}
-      NUXT_PUBLIC_GA4_MEASUREMENT_ID: ${NUXT_PUBLIC_GA4_MEASUREMENT_ID:-}
-      NUXT_PUBLIC_META_PIXEL_ID: ${NUXT_PUBLIC_META_PIXEL_ID:-}
-      NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT: ${NUXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT:-}
       NUXT_PUBLIC_SUPABASE_URL: ${NUXT_PUBLIC_SUPABASE_URL:-}
       NUXT_PUBLIC_SUPABASE_ANON_KEY: ${NUXT_PUBLIC_SUPABASE_ANON_KEY:-}
-      NUXT_PUBLIC_CONTACT_EMAIL: ${NUXT_PUBLIC_CONTACT_EMAIL:-}
-      NUXT_PUBLIC_LINKEDIN_URL: ${NUXT_PUBLIC_LINKEDIN_URL:-}
-      NUXT_PRIVATE_SUPABASE_URL: ${NUXT_PRIVATE_SUPABASE_URL:-}
-      NUXT_PRIVATE_SUPABASE_KEY: ${NUXT_PRIVATE_SUPABASE_KEY:-}
-      NUXT_PRIVATE_SUPABASE_SCHEMA: ${NUXT_PRIVATE_SUPABASE_SCHEMA:-cagtech}
-      NUXT_ADMIN_ALLOWED_EMAILS: ${NUXT_ADMIN_ALLOWED_EMAILS:-}
-      NUXT_ADMIN_REQUIRE_ROLE: ${NUXT_ADMIN_REQUIRE_ROLE:-false}
     networks:
       - default
       - traefik
     labels:
       - traefik.enable=true
       - traefik.docker.network=${TRAEFIK_NETWORK:-web}
+      - traefik.http.middlewares.cagtech-www.redirectregex.regex=^https://www\.(.+)
+      - traefik.http.middlewares.cagtech-www.redirectregex.replacement=https://$${1}
+      - traefik.http.middlewares.cagtech-www.redirectregex.permanent=true
       - traefik.http.routers.cagtech-web.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)
       - traefik.http.routers.cagtech-web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
       - traefik.http.routers.cagtech-web.tls=true
       - traefik.http.routers.cagtech-web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.routers.cagtech-web.tls.domains.0.main=${DOMAIN}
+      - traefik.http.routers.cagtech-web.tls.domains.0.sans=www.${DOMAIN}
+      - traefik.http.routers.cagtech-web.middlewares=cagtech-www
       - traefik.http.services.cagtech-web.loadbalancer.server.port=3000
 
 networks:

@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infrastructure/prisma/output"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["cagtech"]
+}
+
+enum LeadStatus {
+  novo
+  conversa
+  proposta
+  ganho
+  perdido
+
+  @@schema("cagtech")
+}
+
+model Contact {
+  id        String     @id @default(uuid()) @db.Uuid
+  fullName  String     @map("full_name")
+  email     String
+  reason    String?
+  budget    Decimal?   @db.Decimal(12, 2)
+  message   String?
+  status    LeadStatus @default(novo)
+  sortOrder Int        @default(0) @map("sort_order")
+  notes     String?
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([createdAt(sort: Desc)], map: "contacts_created_at_idx")
+  @@index([status], map: "contacts_status_idx")
+  @@map("contacts")
+  @@schema("cagtech")
+}
+
+model SiteSettings {
+  id                    String   @id @default("default")
+  siteUrl               String   @default("") @map("site_url")
+  siteName              String   @default("CAG Tech") @map("site_name")
+  seoLocality           String   @default("Campo Grande, MS") @map("seo_locality")
+  noIndex               Boolean  @default(false) @map("no_index")
+  businessAddress       String   @default("") @map("business_address")
+  businessPhone         String   @default("") @map("business_phone")
+  contactEmail          String   @default("") @map("contact_email")
+  whatsappNumber        String   @default("") @map("whatsapp_number")
+  whatsappMessage       String   @default("") @map("whatsapp_message")
+  instagramUrl          String   @default("") @map("instagram_url")
+  facebookUrl           String   @default("") @map("facebook_url")
+  linkedinUrl           String   @default("") @map("linkedin_url")
+  defaultOgImageUrl     String   @default("/og-default.png") @map("default_og_image_url")
+  ga4MeasurementId      String   @default("") @map("ga4_measurement_id")
+  metaPixelId           String   @default("") @map("meta_pixel_id")
+  googleAdsenseAccount  String   @default("") @map("google_adsense_account")
+  mapsEmbedUrl          String   @default("") @map("maps_embed_url")
+  geoLatitude           String   @default("") @map("geo_latitude")
+  geoLongitude          String   @default("") @map("geo_longitude")
+  packagesIntroTitle    String   @default("") @map("packages_intro_title")
+  packagesIntroBody     String   @default("") @map("packages_intro_body")
+  initialProjectTitle   String   @default("") @map("initial_project_title")
+  initialProjectLead    String   @default("") @map("initial_project_lead")
+  initialProjectBullets Json     @default("[]") @map("initial_project_bullets")
+  createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("site_settings")
+  @@schema("cagtech")
+}
+
+model Package {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String
+  subtitle      String   @default("")
+  priceDisplay  String   @map("price_display")
+  priceFootnote String?  @map("price_footnote")
+  includes      Json     @default("[]")
+  featured      Boolean  @default(false)
+  sortOrder     Int      @default(0) @map("sort_order")
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("packages")
+  @@schema("cagtech")
+}
+
+model Project {
+  id           String         @id @default(uuid()) @db.Uuid
+  name         String
+  siteUrl      String?        @map("site_url")
+  clientName   String         @map("client_name")
+  logoPath     String?        @map("logo_path")
+  sortOrder    Int            @default(0) @map("sort_order")
+  active       Boolean        @default(true)
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  testimonials Testimonial[]
+
+  @@map("projects")
+  @@schema("cagtech")
+}
+
+model Testimonial {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String
+  body      String
+  projectId String   @map("project_id") @db.Uuid
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  sortOrder Int      @default(0) @map("sort_order")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("testimonials")
+  @@schema("cagtech")
+}
+
+model Faq {
+  id        String   @id @default(uuid()) @db.Uuid
+  question  String
+  answer    String
+  sortOrder Int      @default(0) @map("sort_order")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("faqs")
+  @@schema("cagtech")
+}

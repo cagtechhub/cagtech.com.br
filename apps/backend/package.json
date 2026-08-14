@@ -1,0 +1,33 @@
+{
+  "name": "@cagtech/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "prisma generate && tsc -p tsconfig.build.json && mkdir -p dist/infrastructure/prisma/output && cp -a src/infrastructure/prisma/output/. dist/infrastructure/prisma/output/",
+    "start": "node dist/index.js",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@cagtech/shared": "*",
+    "@hono/node-server": "^1.19.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@supabase/supabase-js": "^2.105.4",
+    "dotenv": "^17.2.0",
+    "hono": "^4.11.0",
+    "pg": "^8.16.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.0",
+    "prisma": "^7.2.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

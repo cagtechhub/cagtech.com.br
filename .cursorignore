@@ -1,0 +1,5 @@
+dist
+.nuxt
+node_modules
+
+gha_deploy*

@@ -1,0 +1,2 @@
+-- Legado. Schema atual: apps/backend/prisma/migrations/
+-- Manter estes arquivos só como histórico do primeiro schema.

@@ -1,50 +1,39 @@
 # CAG Tech (`cagtech.com.br`)
 
-Landing institucional em **Nuxt 4** + Tailwind. Formulário de contato e painel admin usam **Supabase** via Nitro (`server/api/`). Não há API em container separado.
+Monorepo Yarn: landing **Nuxt 4** (`apps/web`) + API **Hono/Prisma** (`apps/backend`) + tipos (`packages/shared`). Banco e Auth no **Supabase**.
 
 ## Desenvolvimento
 
 ```bash
 yarn install
+yarn db:generate
 yarn dev
 ```
 
-Copie `.env.example` → `.env`. Preencha:
+Sobe web (3000) e API (3001) juntos via `concurrently`. Isolado: `yarn dev:web` / `yarn dev:api`.
 
-- `NUXT_PUBLIC_SUPABASE_URL` + `NUXT_PUBLIC_SUPABASE_ANON_KEY` (login em `/admin`)
-- `NUXT_PRIVATE_SUPABASE_URL` + `NUXT_PRIVATE_SUPABASE_KEY` (service_role no servidor)
-- `NUXT_PRIVATE_SUPABASE_SCHEMA=cagtech`
-- `NUXT_ADMIN_ALLOWED_EMAILS` (CSV; vazio libera qualquer usuário Auth — só em dev)
+Copie `.env.example` → `.env`. Preencha `DATABASE_URL`, `SUPABASE_*`, `NUXT_PUBLIC_SUPABASE_*`, `NUXT_PUBLIC_API_BASE=http://127.0.0.1:3001`, `NUXT_API_BASE=http://127.0.0.1:3001` e `ADMIN_ALLOWED_EMAILS`.
 
-No Supabase: crie um usuário Auth para o painel, exponha o schema `cagtech` em API → Exposed schemas e rode `supabase/migrations/001_cagtech_contacts.sql` e `002_cagtech_site_settings.sql`.
+Aplique o schema: `yarn db:migrate` (ou rode o SQL em `apps/backend/prisma/migrations/`). Crie o bucket Storage `project-logos` (público) no Supabase.
 
-Rotas do painel: `/admin/login`, `/admin`, `/admin/contatos`, `/admin/configuracoes`.
+Painel: `/admin/login`. Conteúdo da home (pacotes, projetos, depoimentos, FAQ) vem da API, com fallback na store.
 
-SEO, WhatsApp, redes e analytics da landing vêm de `site_settings` (com fallback das env `NUXT_PUBLIC_*`).
+## Docker + Traefik
 
-## Docker + Traefik (produção na OS)
+Padrão Up2tech: rede `web`, sem Postgres local, **sem** `ports:` no host.
 
-Padrão Up2tech: Traefik na rede bridge `web`, Postgres só no Supabase, **sem** `ports:` no host.
-
-Pré-requisitos na VPS:
-
-1. Rede Traefik: `docker network create web` (se ainda não existir)
-2. DNS de `cagtech.com.br` e `www.cagtech.com.br` apontando para a OS
-3. `.env` **só na VPS** (não commitar). `APP_DIR` default: `/opt/cagtech.com.br`
+DNS: `cagtech.com.br`, `www.cagtech.com.br` e `api.cagtech.com.br` no IP da VPS.
 
 ```bash
 cp .env.example .env
-# preencha DOMAIN, NUXT_PUBLIC_SITE_URL, NUXT_PUBLIC_SUPABASE_*, NUXT_PRIVATE_SUPABASE_* e Traefik
-chmod +x deploy.sh
+# DOMAIN, API_DOMAIN, DATABASE_URL, SUPABASE_*, NUXT_PUBLIC_*
 ./deploy.sh
 ```
 
-O Compose sobe só `cagtech-web` (porta interna 3000). Traefik termina TLS (`websecure` / Let's Encrypt) com `Host(DOMAIN)` e `Host(www.DOMAIN)`.
+- `cagtech-web`: 3000, Host apex + www, redirect 301 www→apex, `NUXT_PUBLIC_SITE_URL=https://cagtech.com.br`
+- `cagtech-backend`: 3001, Host `API_DOMAIN`
+- SSR: `NUXT_API_BASE=http://cagtech-backend:3001`
 
-`NUXT_PUBLIC_*` entram como **build args** (canônico, OG, login Auth e CSP). Depois de mudar essas vars, faça rebuild: `docker compose build --no-cache web && docker compose up -d`.
-
-GitHub Actions (`.github/workflows/deploy.yml`): SSH + `git pull` + `deploy.sh`. Secrets: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`. Vars opcionais: `DOMAIN`, `APP_DIR` (default `/opt/cagtech.com.br`).
+GitHub Actions: SSH + `git pull` + `deploy.sh`. Secrets `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`. `APP_DIR` default `/opt/cagtech.com.br`.
 
 Não use `TRAEFIK_NETWORK=host`.
-
-Detalhes de conteúdo, SEO e convenções: ver `AGENTS.md`.
