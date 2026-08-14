@@ -1,12 +1,11 @@
 # Prisma 7 gera TypeScript; o tsc emite client.js. Copiar wasm/runtime sem rm -rf do JS.
 
-FROM node:22-alpine AS base
+FROM node:26-alpine AS base
 
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat wget \
-  && corepack enable \
-  && corepack prepare yarn@1.22.22 --activate
+  && npm install -g yarn@1.22.22
 
 COPY package.json yarn.lock ./
 COPY apps/backend/package.json apps/backend/package.json

@@ -9,6 +9,7 @@ Guia operacional para agentes (Cursor e similares) no projeto `cagtech.com.br`.
 
 ## 2) Stack e estrutura
 Monorepo Yarn 1 (`@cagtech/*`):
+- Runtime **Node >= 26** (web e backend; Docker `node:26-alpine`).
 - `apps/web`: Nuxt 4 (`srcDir: app/`), Vue 3, Pinia, Tailwind, `nuxt-security`.
 - `apps/backend`: API Hono + Prisma 7 (schema `cagtech`) na porta 3001.
 - `packages/shared`: Zod e tipos compartilhados.
@@ -43,6 +44,7 @@ Diretórios relevantes:
 - Conteúdo CMS via painel; fallback na `useLandingStore`.
 - `TRAEFIK_NETWORK=web` (nunca `host`). Alias www só no site (`cagtech-www`).
 - Auth do painel: JWT Supabase + `ADMIN_ALLOWED_EMAILS`.
+- Node **>= 26** em engines, `.nvmrc`, Docker web/API e `@types/node`.
 
 ## 5) Manutenção
 1. Copy/CMS: painel ou fallback na store.

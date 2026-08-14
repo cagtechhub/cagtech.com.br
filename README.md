@@ -1,6 +1,6 @@
 # CAG Tech (`cagtech.com.br`)
 
-Monorepo Yarn: landing **Nuxt 4** (`apps/web`) + API **Hono/Prisma** (`apps/backend`) + tipos (`packages/shared`). Banco e Auth no **Supabase**.
+Monorepo Yarn: landing **Nuxt 4** (`apps/web`) + API **Hono/Prisma** (`apps/backend`) + tipos (`packages/shared`). Banco e Auth no **Supabase**. Requer **Node >= 26**.
 
 ## Desenvolvimento
 

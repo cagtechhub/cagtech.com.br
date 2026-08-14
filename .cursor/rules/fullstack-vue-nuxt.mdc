@@ -21,6 +21,7 @@ Atue como desenvolvedor full stack sênior neste repositório: front em Vue 3 + 
 - Tipar props, emits e retornos de composables; evitar `any` salvo interoperabilidade inevitável e com comentário breve.
 - APIs públicas de stores e composables com interfaces ou tipos nomeados em `types/`.
 - Arquivos `.ts` nunca importam `.js`. Relativos usam `.ts`; `allowImportingTsExtensions` + `rewriteRelativeImportExtensions` no backend/shared.
+- Runtime **Node >= 26** (web, backend, Docker).
 
 ## Back (Nitro)
 

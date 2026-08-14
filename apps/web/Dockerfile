@@ -1,14 +1,13 @@
 # Runtime mantém monorepo + node_modules da raiz. Só recopy vue/@vue incompletos.
 
-ARG NODE_VERSION=22.14
+ARG NODE_VERSION=26
 
 FROM node:${NODE_VERSION}-alpine AS deps
 
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat wget \
-  && corepack enable \
-  && corepack prepare yarn@1.22.22 --activate
+  && npm install -g yarn@1.22.22
 
 COPY package.json yarn.lock ./
 COPY apps/web/package.json ./apps/web/
