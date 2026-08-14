@@ -58,4 +58,6 @@ Diretórios relevantes:
 - Compose sem `ports:`, `container_name` `cagtech-web` / `cagtech-backend`.
 - CSP `connect-src` inclui `NUXT_PUBLIC_API_BASE`.
 
-## 7) Atualizar este arquivo em mudanças estruturais.
+## 7) Atualizar este arquivo e as skills em mudanças de infra
+
+Qualquer ajuste de **infra** (Docker, Traefik, Node, Prisma generate/install, env, deploy, `yarn dev`/concurrently) entra neste `AGENTS.md` **na mesma entrega**. Se a decisão vale para outros apps Up2tech, atualizar também `~/.cursor/rules/` e as skills (`docker-traefik-supabase-deploy`, `nodejs-runtime`, `infra-memory`).
