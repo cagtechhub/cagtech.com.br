@@ -19,7 +19,7 @@ Deploy Docker + Traefik: `cagtech-web` (3000) e `cagtech-backend` (3001). Sem `d
 Diretórios relevantes:
 - `apps/web/app/pages/index.vue` e `apps/web/app/components/landing/`
 - `apps/web/app/constants/landingScreen.ts`
-- `apps/web/app/plugins/00.site-settings.ts`: `GET /public/settings` na API
+- `apps/web/app/app.vue`: `useSiteSeoHead()` no `setup` (não em plugin após `$fetch`)
 - `apps/web/app/plugins/00.landing-cms.ts`: hidrata store com `GET /public/landing`
 - `apps/web/app/composables/useApiBase.ts`: SSR interno vs API pública
 - `apps/web/app/composables/useAdminApi.ts`: Bearer para `/admin/*` na API
@@ -45,7 +45,7 @@ Diretórios relevantes:
 - `TRAEFIK_NETWORK=web` (nunca `host`). Alias www só no site (`cagtech-www`).
 - Auth do painel: JWT Supabase + `ADMIN_ALLOWED_EMAILS`.
 - Node **>= 26** em engines, `.nvmrc`, Docker web/API e `@types/node`.
-- Docker web: recopy só `vue`/`@vue`; **rm** stubs `birpc`/`unhead`/`.nitro` (padrão razconms). `optimizeDeps` dos Vue DevTools (gutierres). Devtools off em production.
+- Docker web: recopy `vue`/`@vue`/`birpc`/`unhead`/`@unhead` no `.output` (stubs Nitro sem `dist`). `optimizeDeps` dos Vue DevTools. Devtools off em production.
 
 ## 5) Manutenção
 1. Copy/CMS: painel ou fallback na store.

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
+useSiteSeoHead()
+
 const props = defineProps<{
   error: NuxtError
 }>()
