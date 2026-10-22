@@ -28,3 +28,5 @@ apps/backend/dist
 packages/shared/dist
 
 gha_deploy*
+# Symlink local para docs compartilhados (../.ai)
+.ai

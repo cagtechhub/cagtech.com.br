@@ -1,0 +1,28 @@
+---
+description: Frontend Vue 3 / Nuxt 4 (apps/web) — composables, Pinia, SEO, nuxt-security, Nitro. Use ao editar páginas, componentes, stores ou server/ do web.
+globs: apps/web/**/*.{vue,ts}
+alwaysApply: false
+---
+
+# Frontend — Nuxt 4 / Vue 3
+
+Papel: `.ai/agents/frontend-engineer.md`. Padrões: `.ai/standards/frontend/coding.md`. Stacks: `.ai/stacks/nuxt4.md`, `.ai/stacks/vue3.md`, `.ai/stacks/pinia.md`, `.ai/stacks/tailwind.md`.
+Visual: **`DESIGN.md`** (ver rule `design-system`). Estrutura: `docs/architecture.md`.
+
+## Vue / Nuxt
+- `<script setup lang="ts">`, Composition API, auto-imports do Nuxt (`srcDir: app/`).
+- Lógica reutilizável em `composables/`; estado global em Pinia (`stores/`); constantes em `constants/`; tipos em `types/` ou `@cagtech/shared`.
+- Páginas finas; seções da landing em `components/landing/Landing*.vue`.
+- Dados de API: `useApiBase` (SSR interno × público); admin via `useAdminApi` (Bearer). CMS hidrata `useLandingStore` em `00.landing-cms`; manter fallback.
+- SEO: `useSiteSeoHead()` no `setup` de `app.vue`; não duplicar meta.
+- Formulários: vee-validate + schemas Zod de `@cagtech/shared`.
+
+## Segurança
+- Respeitar `nuxt-security` (CSP/headers); não relaxar `script-src`/`style-src` sem motivo documentado.
+- Nada sensível em `NUXT_PUBLIC_*`.
+
+## Nitro (`apps/web/server/`)
+- Handlers com validação de input; utilitários em `server/utils/`; `useRuntimeConfig(event)` por requisição.
+
+## Entrega
+Mobile-first, acessível (labels, foco, contraste — `DESIGN.md` §11), `yarn lint`.

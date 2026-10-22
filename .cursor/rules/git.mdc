@@ -1,0 +1,13 @@
+---
+description: Convenções Git do CAG Tech — Conventional Commits pt-BR, sem commit/push sem autorização (push em main faz deploy).
+globs:
+alwaysApply: false
+---
+
+# Git
+
+Ver `docs/git.md`, `.ai/standards/general/git.md`, skill `.ai/skills/pr-prep/SKILL.md`.
+
+- Nunca commit/push/PR sem autorização explícita.
+- `feat|fix|chore|refactor|docs: descrição em pt-BR`.
+- Antes: `yarn lint`, `yarn format`, diff revisado, sem `.env*`/`gha_deploy*`.

@@ -1,0 +1,22 @@
+---
+description: Especialista DBA PostgreSQL/Prisma/Supabase — schema `cagtech`, migrations, queries e índices. Use ao editar schema.prisma, migrations ou queries Prisma.
+globs: apps/backend/prisma/**/*,apps/backend/src/**/*.ts,supabase/**/*.sql
+alwaysApply: false
+---
+
+# 🛢️ DBA — PostgreSQL / Prisma / Supabase
+
+Consulte:
+
+- `.ai/agents/dba-engineer.md`
+- `.ai/stacks/prisma.md`, `.ai/stacks/postgresql.md`, `.ai/stacks/supabase.md`
+
+Para skills:
+
+- `.ai/skills/database-analysis/SKILL.md`
+
+## Projeto
+- Schema único `cagtech` (`@@schema("cagtech")` em todo model/enum).
+- Migrations novas só em `apps/backend/prisma/migrations/`; `supabase/migrations/` é histórico (não editar).
+- Preferir migrations aditivas; destrutivas exigem plano e autorização. Não rodar `db:migrate` sem autorização.
+- Listas do admin com limite/ordenação; evitar N+1 em `include`.

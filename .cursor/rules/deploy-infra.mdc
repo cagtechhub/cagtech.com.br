@@ -1,0 +1,15 @@
+---
+description: Infra/deploy — Docker, Traefik, GitHub Actions, Node runtime, env. Use ao editar Dockerfiles, docker-compose, deploy.sh ou workflows.
+globs: docker-compose.yml,deploy.sh,apps/*/Dockerfile,.github/workflows/**,.dockerignore,.nvmrc,.env.example,apps/web/nuxt.config.ts
+alwaysApply: false
+---
+
+# Infra / Deploy
+
+Papel: `.ai/agents/devops-engineer.md`. Stacks: `.ai/stacks/docker.md`, `.ai/stacks/node.md`. Projeto: `docs/deploy.md`.
+
+- Rede `web`, sem `ports:`, `container_name` `cagtech-web` / `cagtech-backend`, alias `cagtech-www` só no site.
+- Node >= 26 consistente em engines, `.nvmrc`, Dockerfiles, `@types/node`.
+- Push em `main` = produção. Não alterar workflow/compose sem descrever impacto.
+- Nunca ler/imprimir `.env*`, `gha_deploy*`, secrets. `.env.example` só com placeholders.
+- Atualizar `docs/deploy.md` (e `AGENTS.md` se regra dura) na mesma entrega. Se a decisão vale para outros apps Up2tech, sinalizar para atualizar `.ai/`.

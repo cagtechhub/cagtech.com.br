@@ -1,0 +1,12 @@
+---
+description: Contratos compartilhados (@cagtech/shared) — schemas Zod e tipos usados por web e backend.
+globs: packages/shared/**/*.ts
+alwaysApply: false
+---
+
+# Shared — contratos Zod
+
+- Fonte única de payloads web↔API: `settings`, `lead`, `cms`, `admin` (reexportar em `src/index.ts`).
+- Mudança aqui é mudança de contrato: verificar consumidores em `apps/backend` e `apps/web` (rg pelo símbolo) e ajustar ambos na mesma entrega; breaking → `.ai/agents/impact-analyst.md`.
+- Sem dependências além de `zod`; sem código de runtime de app.
+- `.ts` importa `.ts`. Validar: `yarn workspace @cagtech/shared lint`.

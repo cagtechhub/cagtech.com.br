@@ -1,0 +1,4 @@
+yarn.lock
+apps/web/public
+supabase/migrations
+apps/backend/prisma/migrations

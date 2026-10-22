@@ -1,64 +1,70 @@
-# AGENTS.md
+# CAG Tech (`cagtech.com.br`) — Instruções do Agente
 
-Guia operacional para agentes (Cursor e similares) no projeto `cagtech.com.br`.
+Site institucional da CAG Tech: **monorepo Yarn 1** com landing Nuxt 4 + painel `/admin` (`apps/web`), API Hono/Prisma (`apps/backend`) e tipos/Zod compartilhados (`packages/shared`). Banco, Auth e Storage no **Supabase**. Deploy Docker + Traefik via GitHub Actions. Node **>= 26**.
 
-## 1) Objetivo do projeto
-- Landing institucional em Nuxt 4 + Tailwind.
-- Visual dark com identidade azul, ciano e violeta (`apps/web/public/img/logo.png`).
-- Painel `/admin` gerencia leads (kanban), settings, pacotes, projetos, depoimentos e FAQ.
+Este arquivo **roteia**. Detalhe técnico está em `docs/`. Padrões compartilhados: `.ai/` (symlink na raiz do repo → `../.ai` → `pieta.tech/is-essentials/.ai`; não duplicar aqui).
 
-## 2) Stack e estrutura
-Monorepo Yarn 1 (`@cagtech/*`):
-- Runtime **Node >= 26** (web e backend; Docker `node:26-alpine`).
-- `apps/web`: Nuxt 4 (`srcDir: app/`), Vue 3, Pinia, Tailwind, `nuxt-security`.
-- `apps/backend`: API Hono + Prisma 7 (schema `cagtech`) na porta 3001.
-- `packages/shared`: Zod e tipos compartilhados.
+## Fonte de verdade
 
-Deploy Docker + Traefik: `cagtech-web` (3000) e `cagtech-backend` (3001). Sem `db`, sem `ports:` no host. SSR usa `NUXT_API_BASE=http://cagtech-backend:3001`. Browser usa `NUXT_PUBLIC_API_BASE=https://api.cagtech.com.br`. Nunca `service_role` em `NUXT_PUBLIC_*`.
+1. `AGENTS.md` — roteamento e regras duras
+2. `docs/` e `DESIGN.md` — conhecimento do projeto (abrir o doc da tarefa)
+3. código existente — comportamento implementado
+4. `.ai/` — standards/stacks/agents/skills compartilhados (sob demanda)
+5. inferência — só se não houver doc/código; declarar premissa
 
-Diretórios relevantes:
-- `apps/web/app/pages/index.vue` e `apps/web/app/components/landing/`
-- `apps/web/app/constants/landingScreen.ts`
-- `apps/web/app/app.vue`: `useSiteSeoHead()` no `setup` (não em plugin após `$fetch`)
-- `apps/web/app/plugins/00.landing-cms.ts`: hidrata store com `GET /public/landing`
-- `apps/web/app/composables/useApiBase.ts`: SSR interno vs API pública
-- `apps/web/app/composables/useAdminApi.ts`: Bearer para `/admin/*` na API
-- `apps/web/app/pages/admin/`: login, dashboard, leads, pacotes, projetos, depoimentos, FAQ, configurações
-- `packages/shared/src/`: settings, lead, cms, admin
-- `apps/backend/src/app.ts`: rotas públicas e admin
-- `apps/backend/prisma/schema.prisma` + `prisma/migrations/`
-- Convenção: source `.ts` importa `.ts` (nunca `.js`); Prisma gerado em `output/` não se edita.
-- `apps/web/server/routes/`: robots, sitemap, CSP report, health Nitro
-- `docker-compose.yml`, `deploy.sh`, `.github/workflows/deploy.yml`
+Não contradiga decisão documentada sem justificar. Se o doc necessário não existir: **não invente** — proponha a decisão e mantenha simples.
 
-## 3) Comandos
-- `yarn install`
-- `yarn dev` (web + API via concurrently); `yarn dev:web` / `yarn dev:api` isolados
-- `yarn db:generate` / `yarn db:migrate`
-- Docker: `./deploy.sh`
-- `yarn lint` / `yarn format`
+## Roteamento
 
-## 4) Regras
-- Não enfraquecer CSP/`nuxt-security`.
-- Preservar identidade visual do logo.
-- Conteúdo CMS via painel; fallback na `useLandingStore`.
-- `TRAEFIK_NETWORK=web` (nunca `host`). Alias www só no site (`cagtech-www`).
-- Auth do painel: JWT Supabase + `ADMIN_ALLOWED_EMAILS`.
-- Node **>= 26** em engines, `.nvmrc`, Docker web/API e `@types/node`.
-- Docker web: recopy `vue`/`@vue`/`birpc`/`unhead`/`@unhead` no `.output` (stubs Nitro sem `dist`). `optimizeDeps` dos Vue DevTools. Devtools off em production.
+| Tarefa                                 | Documento              |
+| -------------------------------------- | ---------------------- |
+| Protocolo IA / anti-alucinação         | `docs/ai.md`           |
+| Arquitetura e estrutura de pastas      | `docs/architecture.md` |
+| Stack, comandos e validação            | `docs/stack.md`        |
+| Visual, tokens, componentes, redesign  | `DESIGN.md`            |
+| API, banco (Prisma/Supabase), `shared` | `docs/contracts.md`    |
+| Docker, Traefik, CI/CD, env            | `docs/deploy.md`       |
+| Risco e segurança                      | `docs/risk.md`         |
+| Agents e skills                        | `docs/agents.md`       |
+| Validação / testes (`qa-engineer`)     | `docs/stack.md`        |
+| Git / commits                          | `docs/git.md`          |
+| Índice de docs                         | `docs/README.md`       |
 
-## 5) Manutenção
-1. Copy/CMS: painel ou fallback na store.
-2. Layout: `apps/web/app/components/landing/`.
-3. Tema: `apps/web/tailwind.config.ts`.
-4. SEO: `useSiteSeoHead` + `site_settings`.
-5. Schema: Prisma em `apps/backend`.
+Carregar **somente** o documento relevante à tarefa.
 
-## 6) Checklist
-- Âncoras `#home`, `#services`, `#packages`, `#work`, etc.
-- Compose sem `ports:`, `container_name` `cagtech-web` / `cagtech-backend`.
-- CSP `connect-src` inclui `NUXT_PUBLIC_API_BASE`.
+## Comandos essenciais
 
-## 7) Atualizar este arquivo e as skills em mudanças de infra
+```bash
+yarn install
+yarn db:generate          # Prisma client (apps/backend)
+yarn dev                  # web :3000 + API :3001 (concurrently)
+yarn dev:web | yarn dev:api
+yarn lint                 # shared + backend (tsc) + web (eslint)
+yarn format               # prettier --check
+yarn db:migrate           # prisma migrate deploy — só com autorização
+./deploy.sh               # produção (docker compose) — só com autorização
+```
 
-Qualquer ajuste de **infra** (Docker, Traefik, Node, Prisma generate/install, env, deploy, `yarn dev`/concurrently) entra neste `AGENTS.md` **na mesma entrega**. Se a decisão vale para outros apps Up2tech, atualizar também `~/.cursor/rules/` e as skills (`docker-traefik-supabase-deploy`, `nodejs-runtime`, `infra-memory`).
+## Regras duras
+
+- Não inventar requisitos, campos, endpoints, seções da landing ou tokens visuais.
+- Frontend/visual segue `DESIGN.md`; token novo → atualizar `DESIGN.md` + `tailwind.config.ts` juntos.
+- Contrato web↔API mora em `packages/shared` (Zod); não duplicar tipos.
+- Não enfraquecer CSP/`nuxt-security`. Nunca `service_role`/secrets em `NUXT_PUBLIC_*`.
+- Schema só via Prisma (`apps/backend/prisma`); `supabase/migrations/` é histórico.
+- `TRAEFIK_NETWORK=web` (nunca `host`); compose sem `ports:`.
+- Source `.ts` importa `.ts` (nunca `.js`); não editar Prisma gerado em `src/infrastructure/prisma/output/`.
+- Nunca ler/imprimir `.env*` nem `gha_deploy*`.
+- Não criar commit/push/PR, nem rodar migrate/deploy, sem autorização explícita (`docs/git.md`).
+- Dúvida de produto → perguntar ao César, não supor (`.ai/standards/general/product-handoff.md`).
+- Não afirmar validação sem executar.
+- Mudança de infra (Docker, Traefik, Node, Prisma, env, deploy, `yarn dev`) atualiza `docs/deploy.md`/`docs/stack.md` **na mesma entrega**.
+
+## Fluxo
+
+```text
+Entender → abrir doc roteado → web, backend, shared ou infra?
+    → impacto em contrato? → menor mudança → yarn lint → revisar diff
+```
+
+Regra central: landing simples, rápida e segura; complexidade proporcional ao problema (`.ai/architecture/karpathy.md`).

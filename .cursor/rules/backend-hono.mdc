@@ -1,0 +1,18 @@
+---
+description: Backend Hono + Prisma (apps/backend) — rotas públicas/admin, auth Supabase, validação Zod via @cagtech/shared.
+globs: apps/backend/src/**/*.ts
+alwaysApply: false
+---
+
+# Backend — Hono / Prisma
+
+Papel: `.ai/agents/backend-engineer.md`. Padrões: `.ai/standards/backend/coding.md`. Stacks: `.ai/stacks/node.md`, `.ai/stacks/typescript.md`, `.ai/stacks/prisma.md`, `.ai/stacks/supabase.md`.
+Contratos: `docs/contracts.md`. Risco: `docs/risk.md`.
+
+- Rotas em `src/app.ts`: `/public/*` (sem auth) e `/admin/*` (JWT Supabase + `ADMIN_ALLOWED_EMAILS` via `src/lib/auth.ts`).
+- Validar input com schemas Zod de `@cagtech/shared`; mapear DB→DTO em `src/lib/mappers.ts`.
+- Erros: status HTTP correto, sem vazar stack/mensagem interna; não logar PII/tokens.
+- Prisma client de `src/infrastructure/prisma/output` (gerado; não editar). `yarn db:generate` após mudar schema.
+- Config via `src/env.ts`; nunca ler `.env` real.
+- Rota nova/alterada → atualizar `docs/contracts.md` e o consumidor em `apps/web`.
+- Validar: `yarn workspace @cagtech/backend lint`.

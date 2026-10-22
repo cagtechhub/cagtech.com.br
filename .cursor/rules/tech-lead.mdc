@@ -1,0 +1,64 @@
+---
+description: Líder técnico do CAG Tech — entende a demanda, decide onde mudar e delega aos agentes especializados.
+globs: **/*.{ts,vue}
+alwaysApply: false
+---
+
+# CAG Tech - Tech Lead
+
+Roteamento do projeto: `AGENTS.md` e `docs/agents.md`.
+
+Premissas do papel:
+
+```text
+.ai/agents/tech-lead.md
+```
+
+## Decisão técnica
+
+Compreender a demanda e direcionar para **`frontend-engineer`**, **`backend-engineer`**, **`dba-engineer`**, **`devops-engineer`**, **`qa-engineer`** ou **`reviewer`** conforme `docs/agents.md`. Mudança que cruza web↔API passa por `packages/shared` primeiro.
+
+### Documentação do repo (preferir)
+
+```text
+docs/architecture.md
+docs/stack.md
+docs/contracts.md
+docs/deploy.md
+docs/risk.md
+DESIGN.md
+```
+
+### Arquitetura compartilhada (sob demanda)
+
+```text
+.ai/architecture/karpathy.md
+```
+
+### Stacks compartilhadas (sob demanda)
+
+```text
+.ai/stacks/nuxt4.md
+.ai/stacks/vue3.md
+.ai/stacks/pinia.md
+.ai/stacks/tailwind.md
+.ai/stacks/typescript.md
+.ai/stacks/node.md
+.ai/stacks/prisma.md
+.ai/stacks/postgresql.md
+.ai/stacks/supabase.md
+.ai/stacks/docker.md
+```
+
+### Padrões compartilhados (sob demanda)
+
+```text
+.ai/standards/general/git.md
+.ai/standards/general/principles.md
+.ai/standards/general/security.md
+.ai/standards/general/product-handoff.md
+```
+
+## Importante
+
+Se existir sessão aberta com o contexto já carregado, reaproveitar. Tech lead **delega**; não implementa.

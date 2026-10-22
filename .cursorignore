@@ -1,5 +1,17 @@
+node_modules
 dist
 .nuxt
-node_modules
+.output
+.nitro
+.data
+.cache
+apps/backend/src/infrastructure/prisma/output
+.env*
+!.env.example
+.vscode
 
 gha_deploy*
+*.pem
+*.key
+*.crt
+*.p12

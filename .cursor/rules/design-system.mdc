@@ -1,0 +1,30 @@
+---
+description: Design system CAG Tech (DESIGN.md) — paleta dark/light, tipografia, tokens, componentes, motion e acessibilidade. Use em qualquer trabalho visual/redesign da landing ou admin.
+globs: apps/web/app/**/*.vue,apps/web/app/assets/**/*.css,apps/web/tailwind.config.ts,DESIGN.md
+alwaysApply: false
+---
+
+# Design system — fonte: `DESIGN.md`
+
+Antes de mexer em visual, abrir a seção relevante de `DESIGN.md`:
+
+| Tarefa                        | Seção                         |
+| ----------------------------- | ----------------------------- |
+| Tom / copy                    | §1 Posicionamento e tom       |
+| Cores (dark padrão / light)   | §3 Paleta                     |
+| Fontes                        | §4 Tipografia                 |
+| Espaçamento, raios, sombras   | §5 Tokens de layout           |
+| Glow, grid, gradientes        | §6 Efeitos "tech"             |
+| Ícones / imagens              | §7, §8                        |
+| Header, hero, cards, pricing… | §9 Componentes                |
+| Animações                     | §10 Motion                    |
+| A11y                          | §11 Acessibilidade            |
+| Ordem das seções da home      | §12 Estrutura da home         |
+
+## Regras
+- Usar tokens via `tailwind.config.ts` — sem hex solto em componentes.
+- Token novo/alterado → atualizar `DESIGN.md` (frontmatter + seção) e `tailwind.config.ts` na mesma entrega.
+- Preservar identidade do logo (`apps/web/public/img/logo.png`): azul/ciano/violeta.
+- Manter âncoras da home (`#home`, `#services`, `#packages`, `#work`, …).
+- Respeitar `prefers-reduced-motion` e contraste AA.
+- Prompts do Google Stitch (§13) são referência de design, não código.
