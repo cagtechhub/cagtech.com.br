@@ -42,6 +42,7 @@ model SiteSettings {
   siteUrl               String   @default("") @map("site_url")
   siteName              String   @default("CAG Tech") @map("site_name")
   seoLocality           String   @default("Campo Grande, MS") @map("seo_locality")
+  cnpj                  String   @default("") @map("cnpj")
   noIndex               Boolean  @default(false) @map("no_index")
   businessAddress       String   @default("") @map("business_address")
   businessPhone         String   @default("") @map("business_phone")
@@ -63,6 +64,8 @@ model SiteSettings {
   initialProjectTitle   String   @default("") @map("initial_project_title")
   initialProjectLead    String   @default("") @map("initial_project_lead")
   initialProjectBullets Json     @default("[]") @map("initial_project_bullets")
+  contactProjectTypes   Json     @default("[\"Sistema Web / SaaS\", \"Aplicativo Mobile\", \"Integração & APIs\", \"Squad Dedicado\"]") @map("contact_project_types")
+  contactBudgetRanges   Json     @default("[\"Até R$ 20.000 (MVP / Escopo pontual)\", \"R$ 20.000 a R$ 50.000 (Sistema sob medida)\", \"R$ 50.000 a R$ 120.000 (Plataforma complexa / Escala)\", \"Acima de R$ 120.000 / Squad Dedicado contínuo\"]") @map("contact_budget_ranges")
   createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
@@ -90,9 +93,12 @@ model Package {
 model Project {
   id           String         @id @default(uuid()) @db.Uuid
   name         String
+  description  String         @default("") @map("description")
+  category     String         @default("Sistemas Web") @map("category")
   siteUrl      String?        @map("site_url")
   clientName   String         @map("client_name")
   logoPath     String?        @map("logo_path")
+  gallery      Json           @default("[]") @map("gallery")
   sortOrder    Int            @default(0) @map("sort_order")
   active       Boolean        @default(true)
   createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)

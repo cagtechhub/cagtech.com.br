@@ -9,6 +9,7 @@ import type {
   LandingNavItem,
   LandingPackage,
   LandingService,
+  LandingShowcaseProject,
   LandingSocialLink,
   LandingTestimonial,
 } from '~/types/landing'
@@ -39,6 +40,10 @@ export const useLandingStore = defineStore('landing', () => {
   const audiences = ref(['Startups', 'Times de produto', 'Empresas que investem em software web'])
 
   const trustedBrands = ref(['Pieta Tech', 'Gm Bovinos', 'S.G Consultora', 'Nexiqo'])
+
+  const showcaseProjects = ref<LandingShowcaseProject[]>(
+    trustedBrands.value.map((name) => ({ name, clientName: '' }))
+  )
 
   const heroCopy = ref({
     tagline: 'Software web, SEO e landing pages com gestão de projeto',
@@ -241,6 +246,22 @@ export const useLandingStore = defineStore('landing', () => {
     'Outro assunto',
   ])
 
+  const siteCnpj = ref('')
+
+  const contactProjectTypes = ref([
+    'Sistema Web / SaaS',
+    'Aplicativo Mobile',
+    'Integração & APIs',
+    'Squad Dedicado',
+  ])
+
+  const contactBudgetRanges = ref([
+    'Até R$ 20.000 (MVP / Escopo pontual)',
+    'R$ 20.000 a R$ 50.000 (Sistema sob medida)',
+    'R$ 50.000 a R$ 120.000 (Plataforma complexa / Escala)',
+    'Acima de R$ 120.000 / Squad Dedicado contínuo',
+  ])
+
   const socialLinks = computed<LandingSocialLink[]>(() => {
     const items: LandingSocialLink[] = []
     const instagram = String(config.public.instagramUrl || '').trim()
@@ -291,6 +312,15 @@ export const useLandingStore = defineStore('landing', () => {
             : initialProject.value.bullets,
       }
     }
+    if (content.settings.cnpj) {
+      siteCnpj.value = content.settings.cnpj
+    }
+    if (content.settings.contactProjectTypes?.length) {
+      contactProjectTypes.value = content.settings.contactProjectTypes
+    }
+    if (content.settings.contactBudgetRanges?.length) {
+      contactBudgetRanges.value = content.settings.contactBudgetRanges
+    }
     if (content.packages.length > 0) {
       projectPackages.value = content.packages.map((item) => ({
         name: item.name,
@@ -303,6 +333,17 @@ export const useLandingStore = defineStore('landing', () => {
     }
     if (content.projects.length > 0) {
       trustedBrands.value = content.projects.map((item) => item.name)
+      showcaseProjects.value = content.projects.map((item) => ({
+        id: item.id,
+        name: item.name,
+        clientName: item.clientName,
+        description: item.description,
+        category: item.category,
+        siteUrl: item.siteUrl || undefined,
+        logoUrl: item.logoUrl || undefined,
+        gallery: item.gallery || [],
+        galleryUrls: item.galleryUrls || [],
+      }))
     }
     if (content.testimonials.length > 0) {
       testimonials.value = content.testimonials.map((item) => ({
@@ -328,6 +369,7 @@ export const useLandingStore = defineStore('landing', () => {
     navItems,
     audiences,
     trustedBrands,
+    showcaseProjects,
     heroCopy,
     servicesIntro,
     services,
@@ -339,6 +381,9 @@ export const useLandingStore = defineStore('landing', () => {
     faqItems,
     faqColumns,
     contactReasons,
+    siteCnpj,
+    contactProjectTypes,
+    contactBudgetRanges,
     socialLinks,
     footerEmail,
     footerPhone,

@@ -17,7 +17,8 @@ export const env = {
   databaseUrl: required('DATABASE_URL'),
   supabaseUrl: optional('SUPABASE_URL') || optional('NUXT_PUBLIC_SUPABASE_URL'),
   supabaseAnonKey: optional('SUPABASE_ANON_KEY') || optional('NUXT_PUBLIC_SUPABASE_ANON_KEY'),
-  supabaseServiceKey: optional('SUPABASE_SERVICE_ROLE_KEY') || optional('NUXT_PRIVATE_SUPABASE_KEY'),
+  supabaseServiceKey:
+    optional('SUPABASE_SERVICE_ROLE_KEY') || optional('NUXT_PRIVATE_SUPABASE_KEY'),
   webOrigin: optional('WEB_ORIGIN') || optional('NUXT_PUBLIC_SITE_URL') || 'http://localhost:3000',
   adminAllowedEmails: optional('ADMIN_ALLOWED_EMAILS') || optional('NUXT_ADMIN_ALLOWED_EMAILS'),
   adminRequireRole:
@@ -31,6 +32,6 @@ export function parseAllowedEmails(): Set<string> | null {
     raw
       .split(',')
       .map((item) => item.trim().toLowerCase())
-      .filter(Boolean),
+      .filter(Boolean)
   )
 }

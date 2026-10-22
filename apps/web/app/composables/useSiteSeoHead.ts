@@ -34,9 +34,7 @@ export function useSiteSeoHead() {
     return loc ? `${base} — ${loc}` : base
   })
 
-  const documentTitle = computed(() =>
-    limitSeoText(`${siteName.value} | ${pageTitle.value}`, 65),
-  )
+  const documentTitle = computed(() => limitSeoText(`${siteName.value} | ${pageTitle.value}`, 65))
 
   const metaDescription = computed(() => {
     const loc = locality.value
@@ -52,15 +50,17 @@ export function useSiteSeoHead() {
     if (/^https?:\/\//i.test(explicit)) return explicit
     const o = origin.value
     if (!o) return ''
-    const path = (explicit.startsWith('/') ? explicit : String(config.public.defaultOgImagePath || '/og-default.png').trim()) ||
-      '/og-default.png'
+    const path =
+      (explicit.startsWith('/')
+        ? explicit
+        : String(config.public.defaultOgImagePath || '/og-default.png').trim()) || '/og-default.png'
     return `${trimUrl(o)}${path.startsWith('/') ? path : `/${path}`}`
   })
 
   const sameAs = computed(() =>
     [config.public.instagramUrl, config.public.facebookUrl, config.public.linkedinUrl]
       .map((u) => String(u || '').trim())
-      .filter((u) => u.length > 0 && /^https?:\/\//i.test(u)),
+      .filter((u) => u.length > 0 && /^https?:\/\//i.test(u))
   )
 
   const seoKeywords = computed(() => {
@@ -134,7 +134,10 @@ export function useSiteSeoHead() {
     const contactEmail = String(config.public.contactEmail || '').trim()
     const lat = Number(String(config.public.geoLatitude || '').trim())
     const lng = Number(String(config.public.geoLongitude || '').trim())
-    const hasGeo = Number.isFinite(lat) && Number.isFinite(lng) && String(config.public.geoLatitude || '').trim() !== ''
+    const hasGeo =
+      Number.isFinite(lat) &&
+      Number.isFinite(lng) &&
+      String(config.public.geoLatitude || '').trim() !== ''
 
     const contactPoint: Record<string, unknown> = {
       '@type': 'ContactPoint',
@@ -184,9 +187,7 @@ export function useSiteSeoHead() {
         ...(tel ? { telephone: tel } : {}),
         ...(contactEmail ? { email: contactEmail } : {}),
         ...(addressLine || locality.value ? { address: postal } : {}),
-        ...(hasGeo
-          ? { geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng } }
-          : {}),
+        ...(hasGeo ? { geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lng } } : {}),
         ...(sameAs.value.length ? { sameAs: [...sameAs.value] } : {}),
         ...(ogImage.value ? { image: ogImage.value } : {}),
       })

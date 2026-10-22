@@ -29,6 +29,18 @@ export interface LandingFaqItem {
   answer: string
 }
 
+export interface LandingShowcaseProject {
+  id?: string
+  name: string
+  clientName: string
+  description?: string
+  category?: string
+  siteUrl?: string
+  logoUrl?: string
+  gallery?: string[]
+  galleryUrls?: string[]
+}
+
 export interface LandingSocialLink {
   label: string
   href: string

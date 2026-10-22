@@ -8,7 +8,7 @@ const props = withDefaults(
     message?: string
     dismissible?: boolean
   }>(),
-  { dismissible: true, message: undefined },
+  { dismissible: true, message: undefined }
 )
 
 const emit = defineEmits<{
@@ -17,7 +17,7 @@ const emit = defineEmits<{
 
 const role = computed(() => (props.variant === 'error' ? 'alert' : 'status'))
 const ariaLive = computed<'assertive' | 'polite'>(() =>
-  props.variant === 'error' ? 'assertive' : 'polite',
+  props.variant === 'error' ? 'assertive' : 'polite'
 )
 
 const shellClass = computed(() => {
@@ -27,8 +27,7 @@ const shellClass = computed(() => {
     success:
       'border-emerald-400/35 bg-emerald-950/55 text-emerald-50 [&_.notify-msg]:text-emerald-100/90',
     error: 'border-rose-400/40 bg-rose-950/50 text-rose-50 [&_.notify-msg]:text-rose-100/90',
-    warning:
-      'border-amber-400/40 bg-amber-950/45 text-amber-50 [&_.notify-msg]:text-amber-100/90',
+    warning: 'border-amber-400/40 bg-amber-950/45 text-amber-50 [&_.notify-msg]:text-amber-100/90',
     info: 'border-brand-cyan/40 bg-panel/95 text-copy-strong [&_.notify-msg]:text-copy-muted',
   }
   return `${base} ${byVariant[props.variant]}`
@@ -39,10 +38,24 @@ const iconClass = 'mt-0.5 h-5 w-5 shrink-0'
 
 <template>
   <div :class="shellClass" :role="role" :aria-live="ariaLive">
-    <span class="sr-only">{{ variant === 'error' ? 'Erro.' : variant === 'success' ? 'Sucesso.' : variant === 'warning' ? 'Alerta.' : 'Informação.' }}</span>
+    <span class="sr-only">{{
+      variant === 'error'
+        ? 'Erro.'
+        : variant === 'success'
+          ? 'Sucesso.'
+          : variant === 'warning'
+            ? 'Alerta.'
+            : 'Informação.'
+    }}</span>
 
     <!-- success -->
-    <svg v-if="variant === 'success'" :class="iconClass" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      v-if="variant === 'success'"
+      :class="iconClass"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M9 12.5 11 15l4-5"
         stroke="currentColor"
@@ -60,13 +73,14 @@ const iconClass = 'mt-0.5 h-5 w-5 shrink-0'
     </svg>
 
     <!-- error -->
-    <svg v-else-if="variant === 'error'" :class="iconClass" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M12 8v5"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-      />
+    <svg
+      v-else-if="variant === 'error'"
+      :class="iconClass"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M12 8v5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
       <path d="M12 17h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
       <path
         d="M10.3 3.2 2.8 17.1c-.5.9-.5 2 0 2.9s1.4 1.5 2.4 1.5h13.6c1 0 1.9-.6 2.4-1.5s.5-2 0-2.9L13.7 3.2c-.5-.9-1.4-1.5-2.4-1.5s-1.9.6-2.4 1.5Z"
@@ -77,13 +91,14 @@ const iconClass = 'mt-0.5 h-5 w-5 shrink-0'
     </svg>
 
     <!-- warning -->
-    <svg v-else-if="variant === 'warning'" :class="iconClass" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M12 9v4"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-      />
+    <svg
+      v-else-if="variant === 'warning'"
+      :class="iconClass"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M12 9v4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
       <path d="M12 17h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
       <path
         d="M10.3 3.2 2.8 17.1c-.5.9-.5 2 0 2.9s1.4 1.5 2.4 1.5h13.6c1 0 1.9-.6 2.4-1.5s.5-2 0-2.9L13.7 3.2c-.5-.9-1.4-1.5-2.4-1.5s-1.9.6-2.4 1.5Z"
@@ -95,12 +110,7 @@ const iconClass = 'mt-0.5 h-5 w-5 shrink-0'
 
     <!-- info -->
     <svg v-else :class="iconClass" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M12 16v-5"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-      />
+      <path d="M12 16v-5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
       <path d="M12 8h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
       <path
         d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
@@ -124,7 +134,12 @@ const iconClass = 'mt-0.5 h-5 w-5 shrink-0'
       @click="emit('dismiss')"
     >
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+        <path
+          d="M18 6 6 18M6 6l12 12"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+        />
       </svg>
     </button>
   </div>

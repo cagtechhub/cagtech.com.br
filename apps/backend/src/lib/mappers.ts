@@ -28,11 +28,28 @@ export function mapSettings(row: SiteSettingsRow): SiteSettings {
     mapsEmbedUrl: row.mapsEmbedUrl,
     geoLatitude: row.geoLatitude,
     geoLongitude: row.geoLongitude,
+    cnpj: (row as { cnpj?: string }).cnpj ?? '',
     packagesIntroTitle: row.packagesIntroTitle,
     packagesIntroBody: row.packagesIntroBody,
     initialProjectTitle: row.initialProjectTitle,
     initialProjectLead: row.initialProjectLead,
     initialProjectBullets: asStringArray(row.initialProjectBullets),
+    contactProjectTypes: asStringArray(
+      (row as { contactProjectTypes?: unknown }).contactProjectTypes ?? [
+        'Sistema Web / SaaS',
+        'Aplicativo Mobile',
+        'Integração & APIs',
+        'Squad Dedicado',
+      ]
+    ),
+    contactBudgetRanges: asStringArray(
+      (row as { contactBudgetRanges?: unknown }).contactBudgetRanges ?? [
+        'Até R$ 20.000 (MVP / Escopo pontual)',
+        'R$ 20.000 a R$ 50.000 (Sistema sob medida)',
+        'R$ 50.000 a R$ 120.000 (Plataforma complexa / Escala)',
+        'Acima de R$ 120.000 / Squad Dedicado contínuo',
+      ]
+    ),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   }

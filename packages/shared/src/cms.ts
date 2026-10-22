@@ -13,8 +13,11 @@ export const packageInputSchema = z.object({
 
 export const projectInputSchema = z.object({
   name: z.string().trim().min(1).max(160),
+  description: z.string().trim().max(2000).default(''),
+  category: z.string().trim().default('Sistemas Web'),
   siteUrl: z.string().trim().max(500).optional().nullable(),
   clientName: z.string().trim().min(1).max(160),
+  gallery: z.array(z.string()).default([]),
   sortOrder: z.number().int().default(0),
   active: z.boolean().default(true),
 })
@@ -44,6 +47,7 @@ export type ProjectRecord = ProjectInput & {
   id: string
   logoPath: string | null
   logoUrl: string | null
+  galleryUrls: string[]
 }
 export type TestimonialRecord = {
   id: string
@@ -63,6 +67,9 @@ export type LandingContent = {
     initialProjectTitle: string
     initialProjectLead: string
     initialProjectBullets: string[]
+    cnpj: string
+    contactProjectTypes: string[]
+    contactBudgetRanges: string[]
   }
   packages: PackageRecord[]
   projects: ProjectRecord[]

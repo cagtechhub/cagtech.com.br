@@ -5,6 +5,7 @@ export const siteSettingsSchema = z.object({
   siteUrl: z.string().default(''),
   siteName: z.string().default('CAG Tech'),
   seoLocality: z.string().default('Campo Grande, MS'),
+  cnpj: z.string().default(''),
   noIndex: z.boolean().default(false),
   businessAddress: z.string().default(''),
   businessPhone: z.string().default(''),
@@ -26,6 +27,17 @@ export const siteSettingsSchema = z.object({
   initialProjectTitle: z.string().default(''),
   initialProjectLead: z.string().default(''),
   initialProjectBullets: z.array(z.string()).default([]),
+  contactProjectTypes: z
+    .array(z.string())
+    .default(['Sistema Web / SaaS', 'Aplicativo Mobile', 'Integração & APIs', 'Squad Dedicado']),
+  contactBudgetRanges: z
+    .array(z.string())
+    .default([
+      'Até R$ 20.000 (MVP / Escopo pontual)',
+      'R$ 20.000 a R$ 50.000 (Sistema sob medida)',
+      'R$ 50.000 a R$ 120.000 (Plataforma complexa / Escala)',
+      'Acima de R$ 120.000 / Squad Dedicado contínuo',
+    ]),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
@@ -34,6 +46,7 @@ export const updateSiteSettingsSchema = z.object({
   siteUrl: z.string().trim().max(500).optional(),
   siteName: z.string().trim().min(2).max(160).optional(),
   seoLocality: z.string().trim().max(120).optional(),
+  cnpj: z.string().trim().max(40).optional(),
   noIndex: z.boolean().optional(),
   businessAddress: z.string().trim().max(500).optional(),
   businessPhone: z.string().trim().max(40).optional(),
@@ -55,6 +68,8 @@ export const updateSiteSettingsSchema = z.object({
   initialProjectTitle: z.string().trim().max(200).optional(),
   initialProjectLead: z.string().trim().max(2000).optional(),
   initialProjectBullets: z.array(z.string()).optional(),
+  contactProjectTypes: z.array(z.string()).optional(),
+  contactBudgetRanges: z.array(z.string()).optional(),
 })
 
 export type SiteSettings = z.infer<typeof siteSettingsSchema>

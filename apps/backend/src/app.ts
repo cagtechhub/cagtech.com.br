@@ -29,7 +29,7 @@ const app = new Hono<{ Variables: Variables }>()
 const origins = new Set(
   [env.webOrigin, 'http://localhost:3000', 'http://127.0.0.1:3000']
     .map((item) => item.replace(/\/$/, ''))
-    .filter(Boolean),
+    .filter(Boolean)
 )
 
 app.use(
@@ -38,7 +38,7 @@ app.use(
     origin: (origin) => (origin && origins.has(origin.replace(/\/$/, '')) ? origin : ''),
     allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  }),
+  })
 )
 
 app.onError((error, c) => {
@@ -82,19 +82,27 @@ function mapPackage(row: {
 function mapProject(row: {
   id: string
   name: string
+  description?: string
+  category?: string
   siteUrl: string | null
   clientName: string
   logoPath: string | null
+  gallery?: unknown
   sortOrder: number
   active: boolean
 }): ProjectRecord {
+  const galleryItems = jsonIncludes(row.gallery)
   return {
     id: row.id,
     name: row.name,
+    description: row.description || '',
+    category: row.category || 'Sistemas Web',
     siteUrl: row.siteUrl,
     clientName: row.clientName,
     logoPath: row.logoPath,
     logoUrl: publicLogoUrl(row.logoPath),
+    gallery: galleryItems,
+    galleryUrls: galleryItems.map((p) => (p.startsWith('http') ? p : publicLogoUrl(p) || p)),
     sortOrder: row.sortOrder,
     active: row.active,
   }
@@ -167,6 +175,23 @@ app.get('/public/landing', async (c) => {
       initialProjectTitle: settings.initialProjectTitle,
       initialProjectLead: settings.initialProjectLead,
       initialProjectBullets: jsonIncludes(settings.initialProjectBullets),
+      cnpj: (settings as { cnpj?: string }).cnpj || '',
+      contactProjectTypes: jsonIncludes(
+        (settings as { contactProjectTypes?: unknown }).contactProjectTypes ?? [
+          'Sistema Web / SaaS',
+          'Aplicativo Mobile',
+          'Integração & APIs',
+          'Squad Dedicado',
+        ]
+      ),
+      contactBudgetRanges: jsonIncludes(
+        (settings as { contactBudgetRanges?: unknown }).contactBudgetRanges ?? [
+          'Até R$ 20.000 (MVP / Escopo pontual)',
+          'R$ 20.000 a R$ 50.000 (Sistema sob medida)',
+          'R$ 50.000 a R$ 120.000 (Plataforma complexa / Escala)',
+          'Acima de R$ 120.000 / Squad Dedicado contínuo',
+        ]
+      ),
     },
     packages: packages.map(mapPackage),
     projects: projects.map(mapProject),
@@ -348,6 +373,59 @@ admin.post('/projects/:id/logo', async (c) => {
   return c.json(mapProject(updated))
 })
 
+admin.post('/projects/:id/gallery', async (c) => {
+  const body = await c.req.parseBody()
+  const file = body.file
+  if (!(file instanceof File)) {
+    throw new HTTPException(400, { message: 'Arquivo ausente' })
+  }
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
+  const path = `${c.req.param('id')}/gallery/${randomUUID()}.${ext}`
+  const buffer = Buffer.from(await file.arrayBuffer())
+  const supabase = storageClient()
+  await supabase.storage.createBucket('project-logos', { public: true }).catch(() => undefined)
+  const { error } = await supabase.storage.from('project-logos').upload(path, buffer, {
+    contentType: file.type || 'image/png',
+    upsert: true,
+  })
+  if (error) {
+    throw new HTTPException(500, { message: error.message })
+  }
+  const existing = await prisma.project.findUnique({ where: { id: c.req.param('id') } })
+  if (!existing) {
+    throw new HTTPException(404, { message: 'Projeto não encontrado' })
+  }
+  const currentGallery = jsonIncludes(existing.gallery)
+  const updatedGallery = [...currentGallery, path]
+  const updated = await prisma.project.update({
+    where: { id: c.req.param('id') },
+    data: { gallery: updatedGallery },
+  })
+  return c.json(mapProject(updated))
+})
+
+admin.delete('/projects/:id/gallery', async (c) => {
+  const body = (await c.req.json().catch(() => ({}))) as { path?: string; index?: number }
+  const existing = await prisma.project.findUnique({ where: { id: c.req.param('id') } })
+  if (!existing) {
+    throw new HTTPException(404, { message: 'Projeto não encontrado' })
+  }
+  const currentGallery = jsonIncludes(existing.gallery)
+  let updatedGallery: string[]
+  if (body.path) {
+    updatedGallery = currentGallery.filter((p) => p !== body.path)
+  } else if (typeof body.index === 'number') {
+    updatedGallery = currentGallery.filter((_, i) => i !== body.index)
+  } else {
+    throw new HTTPException(400, { message: 'Parâmetro de exclusão ausente' })
+  }
+  const updated = await prisma.project.update({
+    where: { id: c.req.param('id') },
+    data: { gallery: updatedGallery },
+  })
+  return c.json(mapProject(updated))
+})
+
 admin.get('/testimonials', async (c) => {
   const rows = await prisma.testimonial.findMany({
     orderBy: { sortOrder: 'asc' },
@@ -368,7 +446,7 @@ admin.get('/testimonials', async (c) => {
         siteUrl: item.project.siteUrl,
         logoUrl: publicLogoUrl(item.project.logoPath),
       },
-    })),
+    }))
   )
 })
 

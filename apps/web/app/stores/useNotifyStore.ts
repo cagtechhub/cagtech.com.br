@@ -65,7 +65,7 @@ export const useNotifyStore = defineStore('notify', () => {
         id,
         setTimeout(() => {
           dismiss(id)
-        }, durationMs),
+        }, durationMs)
       )
     }
 

@@ -31,7 +31,10 @@ export function useAdminApi() {
     return token.value
   }
 
-  const request = async <T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<T> => {
+  const request = async <T>(
+    path: string,
+    init: { method?: string; body?: unknown } = {}
+  ): Promise<T> => {
     const accessToken = await ensureAccessToken()
     return await $fetch<T>(`${resolveApiBase()}${path}`, {
       method: (init.method as 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE') || 'GET',
@@ -100,6 +103,27 @@ export function useAdminApi() {
     })
   }
 
+  const uploadGalleryImage = async (projectId: string, file: File) => {
+    const accessToken = await ensureAccessToken()
+    const form = new FormData()
+    form.append('file', file)
+    return await $fetch<ProjectRecord>(`${resolveApiBase()}/admin/projects/${projectId}/gallery`, {
+      method: 'POST',
+      body: form,
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+    })
+  }
+
+  const removeGalleryImage = async (
+    projectId: string,
+    pathOrIndex: { path?: string; index?: number }
+  ) => {
+    return await request<ProjectRecord>(`/admin/projects/${projectId}/gallery`, {
+      method: 'DELETE',
+      body: pathOrIndex,
+    })
+  }
+
   return {
     token,
     isAuthenticated,
@@ -116,16 +140,22 @@ export function useAdminApi() {
     updateLead: (id: string, input: UpdateLeadInput) =>
       request<LeadRecord>(`/admin/leads/${id}`, { method: 'PATCH', body: input }),
     listPackages: () => request<PackageRecord[]>('/admin/packages'),
-    createPackage: (body: unknown) => request<PackageRecord>('/admin/packages', { method: 'POST', body }),
+    createPackage: (body: unknown) =>
+      request<PackageRecord>('/admin/packages', { method: 'POST', body }),
     updatePackage: (id: string, body: unknown) =>
       request<PackageRecord>(`/admin/packages/${id}`, { method: 'PUT', body }),
-    deletePackage: (id: string) => request<{ ok: boolean }>(`/admin/packages/${id}`, { method: 'DELETE' }),
+    deletePackage: (id: string) =>
+      request<{ ok: boolean }>(`/admin/packages/${id}`, { method: 'DELETE' }),
     listProjects: () => request<ProjectRecord[]>('/admin/projects'),
-    createProject: (body: unknown) => request<ProjectRecord>('/admin/projects', { method: 'POST', body }),
+    createProject: (body: unknown) =>
+      request<ProjectRecord>('/admin/projects', { method: 'POST', body }),
     updateProject: (id: string, body: unknown) =>
       request<ProjectRecord>(`/admin/projects/${id}`, { method: 'PUT', body }),
-    deleteProject: (id: string) => request<{ ok: boolean }>(`/admin/projects/${id}`, { method: 'DELETE' }),
+    deleteProject: (id: string) =>
+      request<{ ok: boolean }>(`/admin/projects/${id}`, { method: 'DELETE' }),
     uploadLogo,
+    uploadGalleryImage,
+    removeGalleryImage,
     listTestimonials: () => request<TestimonialRecord[]>('/admin/testimonials'),
     createTestimonial: (body: unknown) =>
       request<TestimonialRecord>('/admin/testimonials', { method: 'POST', body }),

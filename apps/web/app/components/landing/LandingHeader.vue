@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-
 import { LANDING_ANCHOR, landingHref } from '~/constants/landingScreen'
-
-const landing = useLandingStore()
-const { brandName, navItems } = storeToRefs(landing)
 
 const hrefHome = landingHref(LANDING_ANCHOR.home)
 const hrefContact = landingHref(LANDING_ANCHOR.contact)
 
-const MOBILE_MENU_ID = 'landing-mobile-menu'
+const navLinks = [
+  { label: 'Serviços', href: '#servicos' },
+  { label: 'Por que a CAG Tech', href: '#por-que-a-cag-tech' },
+  { label: 'Pacotes', href: '#pacotes' },
+  { label: 'Projetos', href: '#projetos' },
+  { label: 'Depoimentos', href: '#depoimentos' },
+  { label: 'FAQ', href: '#faq' },
+]
 
+const MOBILE_MENU_ID = 'landing-mobile-menu'
 const isMenuOpen = ref(false)
 
 function closeMenu(): void {
@@ -32,9 +35,7 @@ function onKeydown(event: KeyboardEvent): void {
 }
 
 watch(isMenuOpen, (open) => {
-  if (!import.meta.client) {
-    return
-  }
+  if (!import.meta.client) return
   document.body.style.overflow = open ? 'hidden' : ''
 })
 
@@ -52,72 +53,79 @@ onUnmounted(() => {
 
 <template>
   <header
-    class="sticky top-0 z-40 border-b border-stroke/80 bg-canvas/85 shadow-[0_14px_44px_-32px_rgba(7,11,20,0.9)] backdrop-blur-md transition-[box-shadow,border-color] duration-300"
+    class="fixed top-0 left-0 right-0 z-50 bg-surface/70 backdrop-blur-xl border-b border-stroke/60"
   >
-    <div class="shell">
-      <div class="flex h-20 items-center justify-between gap-4">
-        <a :href="hrefHome" class="inline-flex items-center gap-3" @click="onNavClick">
-          <img src="/img/logo.png" :alt="brandName" class="h-12 w-auto" width="140" height="46" />
+    <div
+      class="h-[72px] max-w-[1360px] mx-auto px-6 lg:px-12 flex items-center justify-between gap-6"
+    >
+      <!-- Logo + Version tag -->
+      <div class="flex items-center gap-4 shrink-0">
+        <a :href="hrefHome" class="flex items-center" @click="onNavClick">
+          <BrandLogo height-class="h-8" />
+        </a>
+        <span
+          class="hidden sm:inline-block font-eyebrow text-eyebrow uppercase text-text-muted px-2 py-0.5 rounded bg-surface-raised border border-stroke"
+        >
+          v2.5_core
+        </span>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav
+        class="hidden xl:flex items-center gap-1 p-1 rounded-xl bg-surface-container-lowest/60 border border-stroke/50"
+        aria-label="Navegação principal"
+      >
+        <a
+          v-for="item in navLinks"
+          :key="item.href"
+          :href="item.href"
+          class="font-body-sm text-body-sm text-on-surface-variant hover:text-text-strong px-3.5 py-1.5 rounded-lg transition-colors"
+        >
+          {{ item.label }}
+        </a>
+      </nav>
+
+      <!-- Action buttons -->
+      <div class="flex items-center gap-3 shrink-0">
+        <a
+          class="hidden md:inline-flex items-center justify-center h-10 px-4 rounded-[10px] bg-white/[0.03] border border-stroke text-text-strong hover:border-stroke-strong hover:bg-white/[0.06] font-body-sm text-body-sm font-semibold transition-all"
+          href="https://wa.me/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          WhatsApp
+        </a>
+        <a
+          class="hidden sm:inline-flex items-center justify-center h-10 px-5 rounded-[10px] bg-gradient-to-r from-brand-violet via-brand-indigo to-brand-cyan text-light-canvas font-body-sm text-body-sm font-semibold shadow-[0_0_24px_rgba(29,182,253,0.35)] hover:shadow-[0_0_32px_rgba(29,182,253,0.55)] hover:-translate-y-0.5 transition-all"
+          :href="hrefContact"
+        >
+          Solicitar orçamento
         </a>
 
-        <nav class="hidden items-center gap-2 lg:flex" aria-label="Navegação principal">
-          <a
-            v-for="item in navItems"
-            :key="item.href"
-            :href="item.href"
-            class="rounded-control px-3 py-2 text-sm font-medium text-copy-muted transition duration-200 hover:bg-panel-soft hover:text-copy-strong hover:shadow-[0_0_24px_-14px_rgba(29,182,253,0.25)]"
-          >
-            {{ item.label }}
-          </a>
-        </nav>
-
-        <div class="flex items-center gap-2">
-          <a :href="hrefContact" class="brand-button hidden sm:inline-flex">Fale conosco</a>
-
-          <button
-            type="button"
-            class="inline-flex h-11 w-11 items-center justify-center rounded-control border border-stroke bg-panel-soft/80 text-copy-strong transition duration-200 hover:border-brand-cyan/40 hover:text-brand-cyan lg:hidden"
-            :aria-expanded="isMenuOpen"
-            :aria-controls="MOBILE_MENU_ID"
-            :aria-label="isMenuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'"
-            @click="toggleMenu"
-          >
-            <svg
-              v-if="!isMenuOpen"
-              class="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.75"
-              stroke-linecap="round"
-              aria-hidden="true"
-            >
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-            <svg
-              v-else
-              class="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.75"
-              stroke-linecap="round"
-              aria-hidden="true"
-            >
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
-        </div>
+        <!-- Mobile hamburger -->
+        <button
+          type="button"
+          class="w-11 h-11 flex items-center justify-center rounded-lg bg-surface-raised/60 text-text-strong active:scale-95 transition-all xl:hidden"
+          :aria-expanded="isMenuOpen"
+          :aria-controls="MOBILE_MENU_ID"
+          :aria-label="isMenuOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'"
+          @click="toggleMenu"
+        >
+          <span class="material-symbols-outlined text-[22px]">
+            {{ isMenuOpen ? 'close' : 'menu' }}
+          </span>
+        </button>
       </div>
     </div>
 
+    <!-- Mobile Menu Overlay -->
     <ClientOnly>
       <Teleport to="body">
         <Transition name="mobile-menu">
-          <div v-if="isMenuOpen" class="fixed inset-0 z-50 lg:hidden" role="presentation">
+          <div v-if="isMenuOpen" class="fixed inset-0 z-50 xl:hidden" role="presentation">
             <button
               type="button"
-              class="absolute inset-0 bg-canvas/75 backdrop-blur-sm"
+              class="absolute inset-0 bg-canvas/80 backdrop-blur-md"
               aria-label="Fechar menu"
               tabindex="-1"
               @click="closeMenu"
@@ -125,14 +133,14 @@ onUnmounted(() => {
 
             <nav
               :id="MOBILE_MENU_ID"
-              class="absolute inset-x-0 top-20 border-b border-stroke/80 bg-panel/98 px-4 pb-6 pt-4 shadow-[0_24px_48px_-20px_rgba(0,0,0,0.65)] backdrop-blur-md sm:px-6"
+              class="absolute inset-x-0 top-[72px] border-b border-stroke bg-surface/95 px-6 pb-8 pt-4 shadow-[0_24px_48px_-20px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
               aria-label="Navegação mobile"
             >
-              <ul class="flex flex-col gap-1">
-                <li v-for="item in navItems" :key="item.href">
+              <ul class="flex flex-col gap-2">
+                <li v-for="item in navLinks" :key="item.href">
                   <a
                     :href="item.href"
-                    class="flex rounded-control px-4 py-3 text-base font-medium text-copy-base transition duration-200 hover:bg-panel-soft hover:text-copy-strong active:bg-brand-cyan/10"
+                    class="flex rounded-xl px-4 py-3 font-headline-md text-[20px] font-semibold text-text-strong hover:bg-surface-raised transition-colors"
                     @click="onNavClick"
                   >
                     {{ item.label }}
@@ -140,13 +148,24 @@ onUnmounted(() => {
                 </li>
               </ul>
 
-              <a
-                :href="hrefContact"
-                class="brand-button mt-4 w-full justify-center"
-                @click="onNavClick"
-              >
-                Fale conosco
-              </a>
+              <div class="mt-6 flex flex-col gap-3">
+                <a
+                  :href="hrefContact"
+                  class="flex items-center justify-center h-12 w-full rounded-[10px] bg-gradient-to-r from-brand-violet via-brand-indigo to-brand-cyan text-light-canvas font-body-sm font-semibold shadow-[0_0_24px_rgba(29,182,253,0.35)]"
+                  @click="onNavClick"
+                >
+                  Solicitar orçamento
+                </a>
+                <a
+                  href="https://wa.me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center justify-center h-12 w-full rounded-[10px] bg-white/[0.04] border border-stroke text-text-strong font-body-sm font-semibold"
+                  @click="onNavClick"
+                >
+                  WhatsApp
+                </a>
+              </div>
             </nav>
           </div>
         </Transition>
@@ -158,14 +177,14 @@ onUnmounted(() => {
 <style scoped>
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
-  transition: opacity 0.22s ease;
+  transition: opacity 0.2s ease;
 }
 
 .mobile-menu-enter-active nav,
 .mobile-menu-leave-active nav {
   transition:
-    opacity 0.22s ease,
-    transform 0.22s ease;
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .mobile-menu-enter-from,

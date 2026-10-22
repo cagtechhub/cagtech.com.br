@@ -4,37 +4,37 @@ version: 2.0
 description: Sistema de design para o site institucional da CAG Tech (cagtech.com.br) — desenvolvimento de software sob medida.
 colors:
   dark:
-    canvas: "#05070F"
-    surface: "#0B1020"
-    surface-raised: "#111830"
-    stroke: "#1E2A47"
-    stroke-strong: "#2D3E66"
-    text-strong: "#F4F7FF"
-    text-base: "#C6D2E8"
-    text-muted: "#8A9BBD"
-    primary: "#1DB6FD"
-    primary-hover: "#5CCBFF"
-    secondary: "#3F6EFF"
-    accent: "#C464FF"
-    accent-glow: "#A77BFF"
-    success: "#2BD99F"
-    warning: "#FFB547"
-    danger: "#FF5C7A"
+    canvas: '#05070F'
+    surface: '#0B1020'
+    surface-raised: '#111830'
+    stroke: '#1E2A47'
+    stroke-strong: '#2D3E66'
+    text-strong: '#F4F7FF'
+    text-base: '#C6D2E8'
+    text-muted: '#8A9BBD'
+    primary: '#1DB6FD'
+    primary-hover: '#5CCBFF'
+    secondary: '#3F6EFF'
+    accent: '#C464FF'
+    accent-glow: '#A77BFF'
+    success: '#2BD99F'
+    warning: '#FFB547'
+    danger: '#FF5C7A'
   light:
-    canvas: "#FFFFFF"
-    surface: "#F5F7FC"
-    surface-raised: "#FFFFFF"
-    stroke: "#E2E7F2"
-    text-strong: "#0A1126"
-    text-base: "#3A4664"
-    text-muted: "#6B7794"
-    primary: "#0A84C9"
-    secondary: "#1867ED"
-    accent: "#8B3FD9"
+    canvas: '#FFFFFF'
+    surface: '#F5F7FC'
+    surface-raised: '#FFFFFF'
+    stroke: '#E2E7F2'
+    text-strong: '#0A1126'
+    text-base: '#3A4664'
+    text-muted: '#6B7794'
+    primary: '#0A84C9'
+    secondary: '#1867ED'
+    accent: '#8B3FD9'
 typography:
-  display: "Space Grotesk"
-  body: "Inter"
-  mono: "JetBrains Mono"
+  display: 'Space Grotesk'
+  body: 'Inter'
+  mono: 'JetBrains Mono'
 radius: { xs: 6px, sm: 10px, md: 14px, lg: 20px, xl: 28px, pill: 999px }
 spacing-base: 4px
 ---
@@ -61,44 +61,49 @@ spacing-base: 4px
 ## 3. Paleta de cores
 
 ### Marca (do logo atual)
-| Token | Hex | Uso |
-|---|---|---|
-| brand-violet | `#C464FF` | Início do gradiente, acentos |
-| brand-indigo | `#3F6EFF` | Meio do gradiente |
-| brand-blue | `#1867ED` | Links fortes, gráficos |
-| brand-cyan | `#1DB6FD` | Cor primária de ação |
-| brand-cyan-light | `#9DE6FF` | Realces sobre escuro |
+
+| Token            | Hex       | Uso                          |
+| ---------------- | --------- | ---------------------------- |
+| brand-violet     | `#C464FF` | Início do gradiente, acentos |
+| brand-indigo     | `#3F6EFF` | Meio do gradiente            |
+| brand-blue       | `#1867ED` | Links fortes, gráficos       |
+| brand-cyan       | `#1DB6FD` | Cor primária de ação         |
+| brand-cyan-light | `#9DE6FF` | Realces sobre escuro         |
 
 **Gradiente de marca:** `linear-gradient(130deg, #C464FF 0%, #3F6EFF 50%, #1DB6FD 100%)`
 
 ### Tema escuro (padrão)
-| Token | Hex | Uso |
-|---|---|---|
-| canvas | `#05070F` | Fundo da página |
-| surface | `#0B1020` | Cards, seções |
-| surface-raised | `#111830` | Cards em hover, modais, nav |
-| stroke | `#1E2A47` | Bordas 1px |
-| stroke-strong | `#2D3E66` | Bordas em foco/hover |
-| text-strong | `#F4F7FF` | Títulos |
-| text-base | `#C6D2E8` | Corpo |
-| text-muted | `#8A9BBD` | Legendas, labels |
-| primary | `#1DB6FD` | CTAs, links, foco |
-| accent | `#C464FF` | Destaques pontuais, badge "Mais escolhido" |
-| success | `#2BD99F` | Status "online", checks |
-| warning | `#FFB547` | Avisos |
-| danger | `#FF5C7A` | Erros de formulário |
+
+| Token          | Hex       | Uso                                        |
+| -------------- | --------- | ------------------------------------------ |
+| canvas         | `#05070F` | Fundo da página                            |
+| surface        | `#0B1020` | Cards, seções                              |
+| surface-raised | `#111830` | Cards em hover, modais, nav                |
+| stroke         | `#1E2A47` | Bordas 1px                                 |
+| stroke-strong  | `#2D3E66` | Bordas em foco/hover                       |
+| text-strong    | `#F4F7FF` | Títulos                                    |
+| text-base      | `#C6D2E8` | Corpo                                      |
+| text-muted     | `#8A9BBD` | Legendas, labels                           |
+| primary        | `#1DB6FD` | CTAs, links, foco                          |
+| accent         | `#C464FF` | Destaques pontuais, badge "Mais escolhido" |
+| success        | `#2BD99F` | Status "online", checks                    |
+| warning        | `#FFB547` | Avisos                                     |
+| danger         | `#FF5C7A` | Erros de formulário                        |
 
 ### Tema claro (seções de respiro / modo claro)
-| Token | Hex |
-|---|---|
-| canvas | `#FFFFFF` |
-| surface | `#F5F7FC` |
-| stroke | `#E2E7F2` |
+
+| Token       | Hex       |
+| ----------- | --------- |
+| canvas      | `#FFFFFF` |
+| surface     | `#F5F7FC` |
+| stroke      | `#E2E7F2` |
 | text-strong | `#0A1126` |
-| text-base | `#3A4664` |
-| text-muted | `#6B7794` |
-| primary | `#0A84C9` |
-| accent | `#8B3FD9` |
+| text-base   | `#3A4664` |
+| text-muted  | `#6B7794` |
+| primary     | `#0A84C9` |
+| accent      | `#8B3FD9` |
+
+Na seção clara do site, esses hex viram classes Tailwind `paper` (`#FFFFFF`), `paper-soft` (`#F5F7FC`), `paper-stroke` (`#E2E7F2`), `ink-strong`, `ink-base` e `ink-muted`.
 
 Regra 70/20/10: 70% neutros escuros, 20% texto/superfícies, 10% cor de marca.
 
@@ -108,17 +113,17 @@ Regra 70/20/10: 70% neutros escuros, 20% texto/superfícies, 10% cor de marca.
 - **Corpo:** Inter (400, 500, 600) — texto, UI, formulários.
 - **Mono:** JetBrains Mono (400, 500) — eyebrows, labels, trechos de código, métricas.
 
-| Estilo | Fonte | Tamanho / altura | Peso | Tracking |
-|---|---|---|---|---|
-| display-xl (hero) | Space Grotesk | clamp(44px, 6vw, 80px) / 1.02 | 600 | -0.035em |
-| h1 | Space Grotesk | 48px / 1.1 | 600 | -0.03em |
-| h2 (seção) | Space Grotesk | clamp(32px, 4vw, 48px) / 1.12 | 600 | -0.025em |
-| h3 | Space Grotesk | 22px / 1.3 | 600 | -0.01em |
-| body-lg | Inter | 18px / 1.65 | 400 | 0 |
-| body | Inter | 16px / 1.6 | 400 | 0 |
-| small | Inter | 14px / 1.5 | 500 | 0 |
-| eyebrow | JetBrains Mono | 12px / 1.4 | 500 | 0.14em, MAIÚSCULAS |
-| code | JetBrains Mono | 14px / 1.6 | 400 | 0 |
+| Estilo            | Fonte          | Tamanho / altura              | Peso | Tracking           |
+| ----------------- | -------------- | ----------------------------- | ---- | ------------------ |
+| display-xl (hero) | Space Grotesk  | clamp(44px, 6vw, 80px) / 1.02 | 600  | -0.035em           |
+| h1                | Space Grotesk  | 48px / 1.1                    | 600  | -0.03em            |
+| h2 (seção)        | Space Grotesk  | clamp(32px, 4vw, 48px) / 1.12 | 600  | -0.025em           |
+| h3                | Space Grotesk  | 22px / 1.3                    | 600  | -0.01em            |
+| body-lg           | Inter          | 18px / 1.65                   | 400  | 0                  |
+| body              | Inter          | 16px / 1.6                    | 400  | 0                  |
+| small             | Inter          | 14px / 1.5                    | 500  | 0                  |
+| eyebrow           | JetBrains Mono | 12px / 1.4                    | 500  | 0.14em, MAIÚSCULAS |
+| code              | JetBrains Mono | 14px / 1.6                    | 400  | 0                  |
 
 Palavra-chave do título hero pode receber o gradiente de marca (`background-clip: text`). Apenas uma por tela.
 
@@ -132,14 +137,15 @@ Palavra-chave do título hero pode receber o gradiente de marca (`background-cli
 - **Bordas:** sempre 1px; `stroke` padrão, `stroke-strong` em hover.
 
 ### Sombras / elevação
-| Nível | Valor | Uso |
-|---|---|---|
-| e0 | none | Fundo |
-| e1 | `0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4)` | Cards |
-| e2 | `0 12px 32px -12px rgba(0,0,0,0.6)` | Hover, dropdown |
-| e3 | `0 30px 80px -20px rgba(0,0,0,0.75)` | Modais, mock do hero |
+
+| Nível        | Valor                                                                      | Uso                         |
+| ------------ | -------------------------------------------------------------------------- | --------------------------- |
+| e0           | none                                                                       | Fundo                       |
+| e1           | `0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4)`          | Cards                       |
+| e2           | `0 12px 32px -12px rgba(0,0,0,0.6)`                                        | Hover, dropdown             |
+| e3           | `0 30px 80px -20px rgba(0,0,0,0.75)`                                       | Modais, mock do hero        |
 | glow-primary | `0 0 0 1px rgba(29,182,253,0.35), 0 10px 40px -10px rgba(29,182,253,0.45)` | CTA hover, card em destaque |
-| glow-accent | `0 0 60px -10px rgba(196,100,255,0.45)` | Pacote recomendado |
+| glow-accent  | `0 0 60px -10px rgba(196,100,255,0.45)`                                    | Pacote recomendado          |
 
 ## 6. Efeitos visuais "tech"
 
@@ -170,17 +176,20 @@ Limite: no máximo 2 efeitos fortes por viewport.
 ## 9. Componentes
 
 ### Botões
+
 - **Primário:** fundo gradiente de marca, texto `#FFFFFF` 15px/600, padding 12×20, raio 10. Hover: glow-primary + brilho deslizante (shine) + translateY(-1px). Ícone de seta → que se move 2px.
 - **Secundário (ghost):** fundo `rgba(255,255,255,0.03)`, borda `stroke`, texto `text-strong`. Hover: borda `stroke-strong`.
 - **Link:** `primary`, sublinhado animado da esquerda para direita.
 - Alturas: sm 36 · md 44 · lg 52. Foco: anel 2px `primary` com offset 2px.
 
 ### Navegação (header)
+
 - Fixa, glass, altura 68px, borda inferior 1px ao rolar.
 - Esquerda: logo CAG Tech. Centro: Serviços, Pacotes, Projetos, Depoimentos, FAQ. Direita: botão ghost "WhatsApp" + primário "Solicitar orçamento".
 - Mobile: menu fullscreen glass com links grandes (Space Grotesk 28px).
 
 ### Hero
+
 - Eyebrow mono com ponto verde pulsante: `● DISPONÍVEL PARA NOVOS PROJETOS`.
 - Título 2 linhas, palavra-chave em gradiente. Subtítulo body-lg max 560px.
 - 2 CTAs + linha de prova social (ex.: "+X projetos entregues · Y clientes ativos").
@@ -188,37 +197,45 @@ Limite: no máximo 2 efeitos fortes por viewport.
 - Fundo: grid + aurora + noise.
 
 ### Cards de serviço
+
 - Surface, raio 14, padding 28, e1. Chip de ícone, h3, texto curto, lista de 3 tags mono. Spotlight no hover.
 - Layout bento: 1 card grande (2 colunas) + cards menores.
 
 ### Pacotes (pricing)
+
 - 3 colunas. Cada card: nome (h3), descrição curta, preço em Space Grotesk 44px (ou "Sob consulta"), lista de entregáveis com check `success`, CTA.
 - Pacote recomendado: borda gradiente animada, glow-accent, badge pill "Mais escolhido" em `accent`, levemente elevado (-8px).
 - Abaixo: nota "Precisa de algo sob medida? Fale com a gente".
 
 ### Vitrine de projetos
+
 - Grid 2 colunas (desktop) com cards grandes: imagem/mock do projeto em frame de navegador escuro (raio 20), título, categoria em chip mono, stack em ícones, link "Ver projeto →".
 - Hover: imagem dá zoom 1.03 e o frame ganha glow-primary.
 - Filtros por categoria em chips pill (Web, Sistema, App, Integração).
 
 ### Depoimentos
+
 - Carrossel ou masonry de cards glass: aspas grandes em gradiente (opacidade 40%), texto body-lg, avatar com anel gradiente, nome, cargo/empresa, 5 estrelas opcionais.
 - Fileira de logos de clientes em monocromático com marquee lento.
 
 ### FAQ
+
 - Layout 2 colunas: à esquerda título + texto + CTA "Ainda com dúvida? Chame no WhatsApp"; à direita accordion.
 - Item: borda inferior `stroke`, pergunta 18px/600, ícone + que gira para ×; aberto ganha barra lateral 2px gradiente.
 
 ### Formulário de contato
+
 - Painel glass raio 20. Campos: nome, e-mail, WhatsApp, empresa, tipo de projeto (chips selecionáveis), orçamento estimado (select), mensagem.
 - Input: altura 48, fundo `rgba(255,255,255,0.03)`, borda `stroke`, raio 10; foco: borda `primary` + anel `rgba(29,182,253,0.25)` 3px. Label acima 14px/500. Erro em `danger` com ícone.
 - Lado: canais de contato e "resposta em até 1 dia útil".
 
 ### Footer
+
 - Faixa CTA final grande antes do footer: título "Vamos construir seu próximo software?" sobre aurora + grid, botão primário lg.
 - Footer 4 colunas: logo + frase, navegação, serviços, contato/redes. Linha inferior com © CAG Tech, CNPJ, links de privacidade. Texto `text-muted`, fundo `canvas` com borda superior `stroke`.
 
 ### Elementos auxiliares
+
 - **Eyebrow de seção:** `// 02 — PACOTES` em mono, `primary`.
 - **Badge/chip:** pill, 12px mono, fundo `rgba(29,182,253,0.1)`, texto `brand-cyan-light`.
 - **Métricas:** número grande Space Grotesk + label mono, com contador animado.
@@ -257,6 +274,7 @@ Conteúdo de pacotes, projetos, depoimentos e FAQ é gerenciado pelo painel admi
 ## 13. Prompts para o Google Stitch
 
 ### Prompt base (home desktop)
+
 ```
 Design a premium dark landing page for "CAG Tech", a Brazilian custom software development company. All copy in Brazilian Portuguese. Follow DESIGN.md.
 Style: sophisticated, engineering-grade, dark-first (#05070F canvas, #0B1020 cards, 1px #1E2A47 borders). Brand gradient violet #C464FF → indigo #3F6EFF → cyan #1DB6FD used only for CTAs, glows, borders and one highlighted word. Fonts: Space Grotesk for headings (tight tracking), Inter for body, JetBrains Mono for small uppercase eyebrows like "// 01 — SERVIÇOS".
@@ -266,11 +284,13 @@ Rounded corners 10–20px, generous spacing (96px section padding), no stock pho
 ```
 
 ### Prompt mobile
+
 ```
 Create the mobile version (390px) of the CAG Tech landing page following DESIGN.md: same dark palette, grid and aurora background, stacked sections, hero mockup simplified to one dashboard card with a floating "Deploy concluído" toast, horizontally scrollable pricing cards with the recommended one first, fullscreen glass menu, sticky bottom WhatsApp button. Touch targets ≥44px.
 ```
 
 ### Prompts de refinamento
+
 - `Make the pricing section a light "paper" section (#FFFFFF / #F5F7FC, text #0A1126) to create rhythm, keeping the highlighted package dark with gradient border.`
 - `Redesign the projects section as a 2-column showcase with large dark browser frames, hover zoom and cyan glow, plus filter chips: Todos, Web, Sistemas, Apps, Integrações.`
 - `Reduce visual noise: maximum two strong glow effects per screen, keep surfaces neutral, color only as light.`

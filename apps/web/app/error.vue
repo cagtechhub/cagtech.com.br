@@ -36,7 +36,9 @@ const handleClear = () => clearError({ redirect: '/' })
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-3">
         <button type="button" class="brand-button" @click="handleClear">Ir para o início</button>
-        <button type="button" class="ghost-button" @click="() => clearError()">Tentar de novo</button>
+        <button type="button" class="ghost-button" @click="() => clearError()">
+          Tentar de novo
+        </button>
       </div>
     </div>
   </NuxtLayout>

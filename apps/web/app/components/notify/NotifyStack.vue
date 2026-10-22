@@ -13,11 +13,7 @@ const { toasts } = storeToRefs(notify)
         aria-relevant="additions removals"
       >
         <TransitionGroup name="notify-stack">
-          <div
-            v-for="toast in toasts"
-            :key="toast.id"
-            class="pointer-events-auto w-full"
-          >
+          <div v-for="toast in toasts" :key="toast.id" class="pointer-events-auto w-full">
             <NotifyPopup
               :variant="toast.variant"
               :title="toast.title"

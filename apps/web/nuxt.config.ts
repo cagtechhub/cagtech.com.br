@@ -1,6 +1,6 @@
 const publicApiBase = String(process.env.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:3001').replace(
   /\/$/,
-  '',
+  ''
 )
 
 export default defineNuxtConfig({
@@ -114,6 +114,7 @@ export default defineNuxtConfig({
   },
   security: {
     enabled: true,
+    rateLimiter: false,
     /**
      * Chaves em camelCase (OptionKey), como no nuxt-security — nomes HTTP fazem
      * `getNameFromKey` retornar undefined e quebram o SSR com setHeader inválido.
@@ -128,6 +129,7 @@ export default defineNuxtConfig({
           'https://www.googletagmanager.com',
           'https://connect.facebook.net',
         ],
+        'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
         'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         'img-src': [
           "'self'",

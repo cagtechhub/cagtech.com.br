@@ -5,15 +5,17 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="relative overflow-x-clip pb-16">
+  <div class="relative overflow-x-clip">
     <LandingBackground />
     <LandingHeader />
 
-    <main>
+    <main class="relative z-10 w-full pt-[72px]">
       <LandingHeroSection />
+      <LandingMarqueeSection />
       <LandingServicesSection />
-      <LandingPackagesSection />
       <LandingWhySection />
+      <LandingPackagesSection />
+      <LandingProjectsSection />
       <LandingTestimonialsSection />
       <LandingFaqSection />
       <LandingContactSection />
